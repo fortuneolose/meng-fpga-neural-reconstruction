@@ -190,6 +190,11 @@ void reconstruction_accel(
     static uint8_t conv2_out
         [CHANNELS][OUTPUT_H][OUTPUT_W];
 
+    // Move the two large CNN feature-map buffers
+    // from BRAM into UltraRAM on the K26.
+#pragma HLS bind_storage variable=conv1_out type=ram_1p impl=uram
+#pragma HLS bind_storage variable=conv2_out type=ram_1p impl=uram
+
 
     // ------------------------------------------------
     // Integer 2x bilinear interpolation
