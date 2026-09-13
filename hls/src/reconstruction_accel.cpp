@@ -229,7 +229,7 @@ void reconstruction_accel(
 #pragma HLS bind_storage variable=conv2_out type=ram_1p impl=uram
 
 #pragma HLS ARRAY_PARTITION variable=CONV2_WEIGHTS cyclic factor=8 dim=1
-
+#pragma HLS ARRAY_PARTITION variable=CONV3_WEIGHTS cyclic factor=8 dim=1
 
     // ------------------------------------------------
     // Integer 2x bilinear interpolation
@@ -753,13 +753,22 @@ CONV2_Y:
                 packed;
         }
     }
-    // ------------------------------------------------
+     // ------------------------------------------------
     // Conv3
     //
     // 8 input channels
     // 1 output channel
     // 3x3
     // padding 1
+    //
+    // Channel-parallel implementation:
+    //
+    // One packed 64-bit Conv2 feature word supplies
+    // all eight UINT8 input channels for one spatial
+    // kernel position.
+    //
+    // Eight products are evaluated in parallel and
+    // reduced with a balanced integer adder tree.
     //
     // Followed by:
     //     residual requantisation
@@ -786,79 +795,193 @@ CONV3_Y:
                 CONV3_BIAS[0];
 
 
-        CONV3_IC:
+        CONV3_KY:
             for (
-                int ic = 0;
-                ic < CHANNELS;
-                ++ic
+                int ky = 0;
+                ky < 3;
+                ++ky
             ) {
 
-            CONV3_KY:
+            CONV3_KX:
                 for (
-                    int ky = 0;
-                    ky < 3;
-                    ++ky
+                    int kx = 0;
+                    kx < 3;
+                    ++kx
                 ) {
 
-                CONV3_KX:
-                    for (
-                        int kx = 0;
-                        kx < 3;
-                        ++kx
+#pragma HLS PIPELINE II=1
+
+                    const int iy =
+                        y + ky - 1;
+
+                    const int ix =
+                        x + kx - 1;
+
+
+                    if (
+                        iy >= 0
+                        &&
+                        iy < OUTPUT_H
+                        &&
+                        ix >= 0
+                        &&
+                        ix < OUTPUT_W
                     ) {
 
-                        const int iy =
-                            y + ky - 1;
+                        // One packed URAM read supplies
+                        // all eight Conv2 channels.
 
-                        const int ix =
-                            x + kx - 1;
-
-
-                        if (
-                            iy >= 0
-                            &&
-                            iy < OUTPUT_H
-                            &&
-                            ix >= 0
-                            &&
-                            ix < OUTPUT_W
-                        ) {
-
-                            const int weight_index =
-                                ic * 9
-                                +
-                                ky * 3
-                                +
-                                kx;
+                        const feature_word_t word =
+                            conv2_out[
+                                iy
+                            ][ix];
 
 
-                            const feature_word_t word =
-                                conv2_out[
-                                    iy
-                                ][ix];
+                        const uint8_t a0 =
+                            (uint8_t)word.range(7, 0);
+
+                        const uint8_t a1 =
+                            (uint8_t)word.range(15, 8);
+
+                        const uint8_t a2 =
+                            (uint8_t)word.range(23, 16);
+
+                        const uint8_t a3 =
+                            (uint8_t)word.range(31, 24);
+
+                        const uint8_t a4 =
+                            (uint8_t)word.range(39, 32);
+
+                        const uint8_t a5 =
+                            (uint8_t)word.range(47, 40);
+
+                        const uint8_t a6 =
+                            (uint8_t)word.range(55, 48);
+
+                        const uint8_t a7 =
+                            (uint8_t)word.range(63, 56);
 
 
-                            const uint8_t activation =
-                                (uint8_t)
-                                word.range(
-                                    ic * 8 + 7,
-                                    ic * 8
-                                );
+                        const int kernel_index =
+                            ky * 3 + kx;
 
 
-                            acc +=
-                                (
-                                    (int32_t)
-                                    activation
-                                )
-                                *
-                                (
-                                    (int32_t)
-                                    CONV3_WEIGHTS[
-                                        weight_index
-                                    ]
-                                );
-                        }
+                        // Conv3 layout:
+                        //
+                        // [input_channel][3x3 kernel]
+                        //
+                        // Input-channel weights are spaced
+                        // nine entries apart.
+
+                        const int32_t p0 =
+                            ((int32_t)a0)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    0 * 9
+                                ]);
+
+                        const int32_t p1 =
+                            ((int32_t)a1)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    1 * 9
+                                ]);
+
+                        const int32_t p2 =
+                            ((int32_t)a2)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    2 * 9
+                                ]);
+
+                        const int32_t p3 =
+                            ((int32_t)a3)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    3 * 9
+                                ]);
+
+                        const int32_t p4 =
+                            ((int32_t)a4)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    4 * 9
+                                ]);
+
+                        const int32_t p5 =
+                            ((int32_t)a5)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    5 * 9
+                                ]);
+
+                        const int32_t p6 =
+                            ((int32_t)a6)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    6 * 9
+                                ]);
+
+                        const int32_t p7 =
+                            ((int32_t)a7)
+                            *
+                            ((int32_t)
+                                CONV3_WEIGHTS[
+                                    kernel_index
+                                    +
+                                    7 * 9
+                                ]);
+
+
+                        // Balanced reduction tree.
+
+                        const int32_t s01 =
+                            p0 + p1;
+
+                        const int32_t s23 =
+                            p2 + p3;
+
+                        const int32_t s45 =
+                            p4 + p5;
+
+                        const int32_t s67 =
+                            p6 + p7;
+
+
+                        const int32_t s0123 =
+                            s01 + s23;
+
+                        const int32_t s4567 =
+                            s45 + s67;
+
+
+                        const int32_t channel_sum =
+                            s0123 + s4567;
+
+
+                        acc +=
+                            channel_sum;
                     }
                 }
             }
