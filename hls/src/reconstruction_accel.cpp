@@ -370,6 +370,7 @@ CONV1_Y:
                 oc < CHANNELS;
                 ++oc
             ) {
+#pragma HLS PIPELINE off
 
                 int32_t acc =
                     CONV1_BIAS[oc];
