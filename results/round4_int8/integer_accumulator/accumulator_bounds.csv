@@ -1,0 +1,4 @@
+layer,input_qmax,max_abs_quantized_bias,max_mac_bound,guaranteed_total_bound,worst_output_channel,minimum_safe_signed_bits
+conv1,255,40693,179265,200578,2,19
+conv2,255,16139,1179120,1195259,4,22
+conv3,255,1411,629340,630751,0,21

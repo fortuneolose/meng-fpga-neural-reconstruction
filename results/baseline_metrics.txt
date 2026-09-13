@@ -1,0 +1,26 @@
+Baseline Reconstruction Experiment
+
+Input:
+128 x 128 grayscale image
+
+Target:
+256 x 256 grayscale image
+
+Pixel normalization:
+[0, 1]
+
+Bilinear:
+MSE  = 0.00045050
+PSNR = 33.463 dB
+
+Bicubic:
+MSE  = 0.00033016
+PSNR = 34.813 dB
+
+Observation:
+Bicubic interpolation outperformed bilinear interpolation on this test image.
+
+Environment:
+PyTorch 2.14.0+cu130
+CUDA 13.0
+GPU: NVIDIA GeForce RTX 3080

@@ -1,0 +1,88 @@
+Round 4B — Activation Calibration
+=================================
+
+Calibration source
+------------------
+Round 3 training LR patches only
+
+Calibration images:
+500
+
+Held-out validation images used:
+0
+
+Model
+-----
+Round 3 residual CNN with Round 4A INT8-weight simulation.
+
+Activation observations
+-----------------------
+
+bilinear_input
+min: 0.00000000
+max: 1.00000000
+abs max: 1.00000000
+|x| p99.9: 1.00000000
+
+conv1_relu
+min: 0.00000000
+max: 1.53187513
+abs max: 1.53187513
+|x| p99.9: 1.35053098
+
+conv2_relu
+min: 0.00000000
+max: 1.00026369
+abs max: 1.00026369
+|x| p99.9: 0.48600984
+
+residual
+min: -0.27292722
+max: 0.28041983
+abs max: 0.28041983
+|x| p99.9: 0.13890156
+
+reconstructed_output
+min: -0.09106158
+max: 1.14011800
+abs max: 1.14011800
+|x| p99.9: 0.99746650
+
+Round 4C initial quantisation policy
+------------------------------------
+bilinear branch input:
+UINT8, scale = 1.0 / 255
+
+conv1 ReLU:
+UINT8, max-range calibration
+
+conv2 ReLU:
+UINT8, max-range calibration
+
+residual:
+signed INT8, symmetric max-range calibration
+
+biases:
+FP32
+
+bilinear skip path:
+FP32
+
+final residual addition:
+FP32
+
+final output:
+FP32 followed by existing [0,1] evaluation clamp
+
+Reasoning
+---------
+The first W8A8 experiment deliberately uses maximum calibration
+ranges so that activation clipping is avoided for values observed
+during training-set calibration.
+
+Percentile clipping will be considered separately only after the
+unclipped W8A8 baseline has been measured.
+
+ReLU activations use UINT8 because their observed values are
+non-negative. The residual uses signed INT8 because it contains
+both positive and negative values.

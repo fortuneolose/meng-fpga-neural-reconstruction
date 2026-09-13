@@ -1,0 +1,86 @@
+Round 4F — Full Integer Reconstruction Path
+============================================
+
+FP32 reference
+--------------
+MSE: 0.00124333
+PSNR: 29.054 dB
+
+Full integer
+------------
+MSE: 0.00125093
+PSNR: 29.028 dB
+
+Bicubic
+-------
+MSE: 0.00148936
+PSNR: 28.270 dB
+
+FP32 -> full integer loss:
+0.0265 dB
+
+Approximate MSE increase vs FP32:
+0.61%
+
+Full integer advantage vs bicubic:
++0.758 dB
+
+Approximate MSE reduction vs bicubic:
+16.0%
+
+Wins vs bicubic:
+20 / 20
+
+Integer bilinear validation
+---------------------------
+Maximum difference versus PyTorch bilinear:
+0.000000130429
+
+Output fixed-point domain
+-------------------------
+Output denominator:
+4080
+
+Output scale:
+1 / 4080
+
+Residual -> output multiplier:
+9446373
+
+Residual -> output shift:
+20
+
+Residual conversion relative error:
+0.00000301%
+
+Accumulator width bounds
+------------------------
+conv1: 19 bits minimum
+conv2: 22 bits minimum
+conv3: 21 bits minimum
+
+Final residual addition
+-----------------------
+Maximum |residual|:
+1144 output ticks
+
+Theoretical pre-clamp range:
+-1144 to 5224
+
+Minimum safe signed width:
+14 bits
+
+Conclusion
+----------
+The complete reconstruction algorithm has been demonstrated using
+quantised weights and activations, integer convolution accumulation,
+integer biases, integer requantisation and an integer bilinear/final
+residual path.
+
+The full-integer reference retains essentially all FP32 reconstruction
+quality and outperforms bicubic on all 20 held-out validation images.
+
+The current Python convolution emulator uses float64 internally as a
+container for exactly representable integer products and sums. A pure
+integer golden reference will therefore be produced before HLS/RTL
+implementation.

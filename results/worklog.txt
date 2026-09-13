@@ -1,0 +1,75 @@
+MEng Neural Reconstruction — Initial Software Experiment
+
+Environment
+-----------
+Python: 3.13.1
+PyTorch: 2.14.0+cu130
+CUDA runtime: 13.0
+GPU: NVIDIA GeForce RTX 3080
+
+Dataset
+-------
+Training source images: 12 DIV2K images
+Validation source images: 4 separate DIV2K validation images
+
+Training patches: 60
+Validation patches: 4
+
+HR size: 256x256 grayscale
+LR size: 128x128 grayscale
+Degradation: bicubic x2 downsampling
+Pixel range: [0,1]
+
+Model
+-----
+Compact 3-layer CNN
+Bilinear x2 upsampling
+Channels: 1 -> 8 -> 8 -> 1
+Kernel size: 3x3
+Trainable parameters: 737
+
+Verification
+------------
+Forward pass: PASS
+Backward pass: PASS
+CUDA execution: PASS
+
+Single-pair learning
+--------------------
+Initial MSE: 0.20750067
+Final MSE: 0.00064742
+Initial PSNR: 6.830 dB
+Final PSNR: 31.888 dB
+
+Short training
+--------------
+Epochs: 30
+Best epoch: 30
+Validation MSE: 0.00224875
+Validation PSNR: 26.481 dB
+
+Held-out comparison
+-------------------
+CNN:
+MSE  = 0.00224875
+PSNR = 26.481 dB
+
+Bilinear:
+MSE  = 0.00058708
+PSNR = 32.313 dB
+
+Bicubic:
+MSE  = 0.00043263
+PSNR = 33.639 dB
+
+Conclusion
+----------
+The neural training pipeline works and the CNN generalises to unseen
+validation images, but reconstruction quality is substantially below
+bilinear and bicubic interpolation.
+
+Next task
+---------
+Implement a residual reconstruction CNN that predicts corrections to
+the bilinear baseline. Train and evaluate it using the exact same
+training/validation split and comparison procedure.

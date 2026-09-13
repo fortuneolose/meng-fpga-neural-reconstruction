@@ -1,0 +1,75 @@
+Round 3 FP32 Reference
+======================
+
+Model:
+ResidualReconstructionCNN
+
+Trainable parameters:
+737
+
+Training configuration:
+Training source images: 100
+Training patches: 500
+Validation source images: 20
+Validation images: 0805-0824
+Epochs: 30
+Batch size: 8
+Learning rate: 1e-3
+Optimizer: Adam
+Random seed: 42
+Best epoch: 30
+Best global step: 1890
+
+FP32 Residual CNN
+-----------------
+Mean MSE:
+0.00124333
+
+PSNR from mean MSE:
+29.054 dB
+
+Mean per-image PSNR:
+31.182 dB
+
+Bicubic Baseline
+----------------
+Mean MSE:
+0.00148936
+
+PSNR from mean MSE:
+28.270 dB
+
+Mean per-image PSNR:
+30.319 dB
+
+Torch Bilinear Baseline
+-----------------------
+Mean MSE:
+0.00184895
+
+PSNR from mean MSE:
+27.331 dB
+
+Mean per-image PSNR:
+29.134 dB
+
+Held-out results
+----------------
+Residual CNN wins vs bicubic:
+20 / 20
+
+Residual CNN wins vs exact Torch bilinear:
+20 / 20
+
+FP32 advantage over bicubic:
++0.784 dB PSNR from mean MSE
+
+Approximate FP32 mean-MSE reduction versus bicubic:
+16.5%
+
+Purpose
+-------
+This Round 3 checkpoint is the frozen FP32 reference for all Round 4
+INT8 post-training quantisation experiments.
+
+Round 3 files must not be overwritten or retrained during Round 4.

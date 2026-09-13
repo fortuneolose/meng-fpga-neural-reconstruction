@@ -1,0 +1,51 @@
+Round 4D — Integer Accumulator Emulation
+========================================
+
+FP32 PSNR:
+29.054 dB
+
+Fake W8A8 PSNR:
+29.028 dB
+
+Integer-accumulator PSNR:
+29.028 dB
+
+Bicubic PSNR:
+28.270 dB
+
+Integer wins vs bicubic:
+20 / 20
+
+Maximum fake-W8A8 vs integer output difference:
+0.0132481754
+
+Observed validation-set accumulator peaks
+-----------------------------------------
+conv1:
+125172
+Observed minimum signed bits: 18
+
+conv2:
+88886
+Observed minimum signed bits: 18
+
+conv3:
+37900
+Observed minimum signed bits: 17
+
+Important:
+These are empirical observed peaks only and must not be used
+directly as guaranteed FPGA accumulator widths.
+
+Conclusion
+----------
+Integer accumulation with quantised biases preserved the W8A8
+quality result and remained above bicubic on all 20 held-out images.
+
+Requantisation is still performed using floating-point scale
+multiplication. The next stages are:
+
+1. derive guaranteed accumulator bounds;
+2. replace floating-point requantisation with integer
+   multiplier-and-shift arithmetic;
+3. quantise the remaining skip/add datapath.

@@ -1,0 +1,49 @@
+Round 4E — Integer Requantisation
+=================================
+
+Right shift:
+20 bits
+
+Requantisation multiplier ranges
+--------------------------------
+conv1:
+1418 to 2922
+Maximum relative scale error:
+0.017301%
+
+conv2:
+1420 to 5280
+Maximum relative scale error:
+0.013916%
+
+conv3:
+3522
+Maximum relative scale error:
+0.010121%
+
+Results
+-------
+FP32 PSNR:
+29.054 dB
+
+Integer-requant PSNR:
+29.028 dB
+
+Bicubic PSNR:
+28.270 dB
+
+FP32 -> integer-requant loss:
+0.0262 dB
+
+Integer-requant wins vs bicubic:
+20 / 20
+
+Conclusion
+----------
+The learned residual CNN branch can be represented using
+8-bit weights, 8-bit activations, integer convolution
+accumulators, quantised biases and integer
+multiplier/right-shift requantisation.
+
+The remaining floating-point operations are the bilinear
+skip path and final residual addition.

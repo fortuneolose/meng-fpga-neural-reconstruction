@@ -1,0 +1,86 @@
+Round 4A — Weight-Only INT8 PTQ
+================================
+
+Reference checkpoint
+--------------------
+Round 3 FP32 best model
+Epoch: 30
+Parameters: 737
+
+Quantisation configuration
+--------------------------
+Convolution weight values quantised: 720
+Bias values remaining FP32: 17
+Weight representation: signed INT8
+Quantisation type: symmetric
+Granularity: per-output-channel
+Integer range: -127 to +127
+
+Activations:
+FP32
+
+Inference arithmetic:
+FP32 after dequantisation
+
+FP32 Reference
+--------------
+Mean MSE: 0.00124333
+PSNR from mean MSE: 29.054 dB
+Mean image PSNR: 31.182 dB
+
+INT8 Weight-Only
+----------------
+Mean MSE: 0.00124682
+PSNR from mean MSE: 29.042 dB
+Mean image PSNR: 31.154 dB
+
+Bicubic
+-------
+Mean MSE: 0.00148936
+PSNR from mean MSE: 28.270 dB
+Mean image PSNR: 30.319 dB
+
+Quantisation effect
+-------------------
+FP32 -> INT8 aggregate PSNR loss:
+0.0122 dB
+
+Approximate INT8 MSE increase versus FP32:
+0.28%
+
+INT8 advantage over bicubic:
++0.772 dB PSNR from mean MSE
+
+Approximate INT8 MSE reduction versus bicubic:
+16.3%
+
+INT8 wins versus bicubic:
+20 / 20
+
+Most quantisation-sensitive validation image:
+0809
+
+0809 FP32 PSNR:
+40.015 dB
+
+0809 INT8-weight PSNR:
+39.817 dB
+
+0809 weight-quantisation loss:
+0.1986 dB
+
+0809 bicubic PSNR:
+38.889 dB
+
+Conclusion
+----------
+Weight-only INT8 post-training quantisation preserved the FP32
+model's reconstruction performance extremely well on the 20-image
+held-out validation set.
+
+The model retained its advantage over bicubic interpolation on all
+20 validation images.
+
+This experiment simulates INT8 weight representation by dequantising
+the stored INT8 weights for floating-point PyTorch execution. It does
+not yet represent bit-exact integer convolution or FPGA inference.

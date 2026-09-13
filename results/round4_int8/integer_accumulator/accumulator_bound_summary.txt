@@ -1,0 +1,49 @@
+Accumulator Bound Analysis
+==========================
+
+conv1
+-----
+Observed validation peak:
+125172
+
+Guaranteed absolute bound:
+200578
+
+Minimum safe signed width:
+19 bits
+
+conv2
+-----
+Observed validation peak:
+88886
+
+Guaranteed absolute bound:
+1195259
+
+Minimum safe signed width:
+22 bits
+
+conv3
+-----
+Observed validation peak:
+37900
+
+Guaranteed absolute bound:
+630751
+
+Minimum safe signed width:
+21 bits
+
+Interpretation
+--------------
+The observed validation-set accumulator peaks are not sufficient
+for hardware sizing.
+
+The guaranteed bounds use the actual quantised INT8 weights,
+maximum permitted activation values and quantised biases.
+
+For the first FPGA/HLS implementation, INT32 accumulators will be
+used for simplicity and verification margin.
+
+The reduced widths 19/22/21 bits are candidates for later hardware
+optimisation after bit-exact equivalence is established.

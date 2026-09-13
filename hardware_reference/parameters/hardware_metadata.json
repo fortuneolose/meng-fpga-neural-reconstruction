@@ -1,0 +1,70 @@
+{
+    "source_checkpoint": "results/round3/best_model.pt",
+    "checkpoint_epoch": 30,
+    "tensor_layout": "OIHW",
+    "input_shape": [
+        1,
+        128,
+        128
+    ],
+    "output_shape": [
+        1,
+        256,
+        256
+    ],
+    "layers": {
+        "conv1": {
+            "shape": [
+                8,
+                1,
+                3,
+                3
+            ],
+            "weight_dtype": "int8",
+            "bias_dtype": "int32",
+            "activation_output": "uint8",
+            "accumulator_min_bits": 19
+        },
+        "conv2": {
+            "shape": [
+                8,
+                8,
+                3,
+                3
+            ],
+            "weight_dtype": "int8",
+            "bias_dtype": "int32",
+            "activation_output": "uint8",
+            "accumulator_min_bits": 22
+        },
+        "conv3": {
+            "shape": [
+                1,
+                8,
+                3,
+                3
+            ],
+            "weight_dtype": "int8",
+            "bias_dtype": "int32",
+            "activation_output": "int8",
+            "accumulator_min_bits": 21
+        }
+    },
+    "activation_scales": {
+        "input": 0.00392156862745098,
+        "conv1": 0.006007353450980392,
+        "conv2": 0.003922602705882352,
+        "residual": 0.002208030157480315
+    },
+    "requant_shift": 20,
+    "bilinear_denominator": 16,
+    "output_denominator": 4080,
+    "output_scale": 0.00024509803921568627,
+    "residual_to_output_multiplier": 9446373,
+    "residual_to_output_shift": 20,
+    "final_add_min_bits": 14,
+    "final_add_preclip_range": [
+        -1144,
+        5224
+    ]
+}

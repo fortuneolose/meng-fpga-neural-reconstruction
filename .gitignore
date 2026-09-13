@@ -1,0 +1,34 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Large ML checkpoints / datasets
+*.pt
+*.pth
+*.ckpt
+/data/
+/results.zip
+
+# Vitis / HLS generated output
+hls/work/
+hls/reconstruction_hls/
+*.jou
+*.log
+*.str
+*.wdb
+*.xsim
+
+# Vivado generated output
+.Xil/
+*.cache/
+*.runs/
+*.sim/
+*.hw/
+*.ip_user_files/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

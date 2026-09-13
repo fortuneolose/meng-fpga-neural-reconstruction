@@ -1,0 +1,127 @@
+Round 4C — W8A8 Max-Range PTQ
+=============================
+
+Quantisation configuration
+--------------------------
+Weights:
+Signed INT8
+Symmetric per-output-channel
+
+Bilinear input to residual branch:
+UINT8
+
+Conv1 ReLU:
+UINT8
+
+Conv2 ReLU:
+UINT8
+
+Residual:
+Signed INT8
+
+Biases:
+FP32
+
+Bilinear skip path:
+FP32
+
+Final residual addition:
+FP32
+
+Activation calibration:
+Maximum observed range from 500 Round 3 training patches.
+
+Held-out validation images used for calibration:
+0
+
+Activation scales
+-----------------
+Input UINT8:
+0.0039215686
+
+Conv1 ReLU UINT8:
+0.0060073535
+
+Conv2 ReLU UINT8:
+0.0039226027
+
+Residual INT8:
+0.0022080302
+
+FP32 Reference
+--------------
+Mean MSE:
+0.00124333
+
+PSNR from mean MSE:
+29.054 dB
+
+Mean image PSNR:
+31.182 dB
+
+W8A8 Max-Range
+--------------
+Mean MSE:
+0.00125089
+
+PSNR from mean MSE:
+29.028 dB
+
+Mean image PSNR:
+31.117 dB
+
+Bicubic
+-------
+Mean MSE:
+0.00148936
+
+PSNR from mean MSE:
+28.270 dB
+
+Mean image PSNR:
+30.319 dB
+
+Quantisation effect
+-------------------
+FP32 -> W8A8 aggregate PSNR loss:
+0.0263 dB
+
+Approximate W8A8 MSE increase versus FP32:
+0.61%
+
+W8A8 advantage over bicubic:
++0.758 dB
+
+Approximate W8A8 MSE reduction versus bicubic:
+16.0%
+
+W8A8 wins versus bicubic:
+20 / 20
+
+W8A8 wins versus FP32:
+0 / 20
+
+Most quantisation-sensitive image:
+0809
+
+0809 FP32:
+40.015 dB
+
+0809 W8A8:
+39.618 dB
+
+0809 bicubic:
+38.889 dB
+
+Conclusion
+----------
+Max-range W8A8 post-training quantisation retained nearly all
+FP32 reconstruction quality and remained superior to bicubic
+interpolation on all 20 held-out validation images.
+
+This remains a fake-quantisation simulation. The convolution
+operations themselves are still performed using floating-point
+PyTorch arithmetic after dequantisation.
+
+The next experiment therefore evaluates integer convolution
+accumulators and quantised biases.
