@@ -1,0 +1,17 @@
+Exception at PC 0x00007FFEEAC5E2B0
+Attemped to write at address 0x0000000000000000
+Printing stacktrace...
+
+[0] (iki_remove_auto_root_pointers+0x7440) [0x00007FFEEAC5E2B0]
+[1] (iki_remove_auto_root_pointers+0x7440) [0x00007FFEEAC5E2B0]
+[2] (iki_vlog_create_dynamic_named_block_invocation+0x2f) [0x00007FFEEACFC75F]
+[3]  [0x0000000000CA0AF1]
+[4] (iki_vlogfile_write+0x112ba) [0x00007FFEEACFA9CA]
+[5] (vlog_transfunc_noeventcallback_2state+0xa164) [0x00007FFEEACAC254]
+[6] (svSizeOfArray+0x4c2) [0x00007FFEEAD1A062]
+[7] (iki_vhdl_file_write_int64+0x8acd) [0x00007FFEEAD17B3D]
+[8] (iki_vhdl_file_write_int64+0x795f) [0x00007FFEEAD169CF]
+[9]  [0x00007FF80FF9CD30]
+[10] (BaseThreadInitThunk+0x17) [0x00007FF8117FCCB7]
+[11] (RtlUserThreadStart+0x2c) [0x00007FF8127CCAEC]
+Done

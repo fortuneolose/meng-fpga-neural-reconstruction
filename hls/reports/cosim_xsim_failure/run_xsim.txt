@@ -1,0 +1,7 @@
+Golden-vector root: ../../../../tb/data
+
+0805: BIT-EXACT PASS
+
+All 3 golden vectors matched exactly.
+Maximum allowed difference: 0 ticks
+HLS C MODEL VERIFICATION: PASS
