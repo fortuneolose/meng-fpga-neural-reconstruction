@@ -2,6 +2,25 @@
 #include "reconstruction_params.h"
 
 #include <stdint.h>
+#include <ap_int.h>
+
+
+// --------------------------------------------------
+// Packed CNN feature-map word
+//
+// 8 channels x 8 bits = 64 bits:
+//
+// bits  7:0   -> channel 0
+// bits 15:8   -> channel 1
+// bits 23:16  -> channel 2
+// bits 31:24  -> channel 3
+// bits 39:32  -> channel 4
+// bits 47:40  -> channel 5
+// bits 55:48  -> channel 6
+// bits 63:56  -> channel 7
+// --------------------------------------------------
+
+typedef ap_uint<64> feature_word_t;
 
 
 // --------------------------------------------------
@@ -156,6 +175,7 @@ void reconstruction_accel(
     const uint8_t input[INPUT_PIXELS],
     uint16_t output[OUTPUT_PIXELS]
 ) {
+
 #pragma HLS INTERFACE m_axi port=input \
     offset=slave bundle=gmem0 depth=16384
 
@@ -172,11 +192,19 @@ void reconstruction_accel(
     port=return bundle=control
 
 
-    // This first implementation intentionally uses
-    // full-frame intermediate buffers.
+    // ------------------------------------------------
+    // Intermediate storage
     //
-    // It is the bit-exact baseline, not yet the
-    // optimized streaming architecture.
+    // baseline_ticks:
+    //     exact integer bilinear result in output ticks
+    //
+    // branch_input:
+    //     UINT8 input to the CNN residual branch
+    //
+    // conv1_out / conv2_out:
+    //     eight 8-bit feature channels packed into one
+    //     64-bit word for every output pixel.
+    // ------------------------------------------------
 
     static uint16_t baseline_ticks
         [OUTPUT_H][OUTPUT_W];
@@ -184,14 +212,19 @@ void reconstruction_accel(
     static uint8_t branch_input
         [OUTPUT_H][OUTPUT_W];
 
-    static uint8_t conv1_out
-        [CHANNELS][OUTPUT_H][OUTPUT_W];
+    static feature_word_t conv1_out
+        [OUTPUT_H][OUTPUT_W];
 
-    static uint8_t conv2_out
-        [CHANNELS][OUTPUT_H][OUTPUT_W];
+    static feature_word_t conv2_out
+        [OUTPUT_H][OUTPUT_W];
 
-    // Move the two large CNN feature-map buffers
-    // from BRAM into UltraRAM on the K26.
+
+    // Store the two large CNN feature maps in UltraRAM.
+    //
+    // Packing all eight channels into one 64-bit word
+    // makes much better use of the physical URAM width
+    // than the previous eight-bit-wide memory layout.
+
 #pragma HLS bind_storage variable=conv1_out type=ram_1p impl=uram
 #pragma HLS bind_storage variable=conv2_out type=ram_1p impl=uram
 
@@ -223,7 +256,7 @@ BILINEAR_Y:
         );
 
 
-BILINEAR_X:
+    BILINEAR_X:
         for (
             int x = 0;
             x < OUTPUT_W;
@@ -304,42 +337,50 @@ BILINEAR_X:
     //
     // 1 input channel
     // 8 output channels
-    // 3x3, padding 1
+    // 3x3
+    // padding 1
+    //
+    // All eight output channels for one pixel are
+    // collected into a single 64-bit feature word.
     // ------------------------------------------------
 
-CONV1_OC:
+CONV1_Y:
     for (
-        int oc = 0;
-        oc < 8;
-        ++oc
+        int y = 0;
+        y < OUTPUT_H;
+        ++y
     ) {
 
-CONV1_Y:
+    CONV1_X:
         for (
-            int y = 0;
-            y < OUTPUT_H;
-            ++y
+            int x = 0;
+            x < OUTPUT_W;
+            ++x
         ) {
 
-CONV1_X:
+            feature_word_t packed =
+                0;
+
+
+        CONV1_OC:
             for (
-                int x = 0;
-                x < OUTPUT_W;
-                ++x
+                int oc = 0;
+                oc < CHANNELS;
+                ++oc
             ) {
 
                 int32_t acc =
                     CONV1_BIAS[oc];
 
 
-CONV1_KY:
+            CONV1_KY:
                 for (
                     int ky = 0;
                     ky < 3;
                     ++ky
                 ) {
 
-CONV1_KX:
+                CONV1_KX:
                     for (
                         int kx = 0;
                         kx < 3;
@@ -374,7 +415,9 @@ CONV1_KX:
                             acc +=
                                 (
                                     (int32_t)
-                                    branch_input[iy][ix]
+                                    branch_input[
+                                        iy
+                                    ][ix]
                                 )
                                 *
                                 (
@@ -391,8 +434,10 @@ CONV1_KX:
                 const int64_t product =
                     ((int64_t)acc)
                     *
-                    ((int64_t)
-                        CONV1_MULT[oc]);
+                    (
+                        (int64_t)
+                        CONV1_MULT[oc]
+                    );
 
 
                 const int64_t q =
@@ -402,9 +447,19 @@ CONV1_KX:
                     );
 
 
-                conv1_out[oc][y][x] =
+                const uint8_t q8 =
                     clamp_u8(q);
+
+
+                packed.range(
+                    oc * 8 + 7,
+                    oc * 8
+                ) = q8;
             }
+
+
+            conv1_out[y][x] =
+                packed;
         }
     }
 
@@ -414,48 +469,60 @@ CONV1_KX:
     //
     // 8 input channels
     // 8 output channels
+    // 3x3
+    // padding 1
+    //
+    // The packed Conv1 word is read and the selected
+    // input channel is extracted from its byte lane.
+    //
+    // This is still the correctness-first version.
+    // Channel-level MAC parallelism comes later.
     // ------------------------------------------------
 
-CONV2_OC:
+CONV2_Y:
     for (
-        int oc = 0;
-        oc < 8;
-        ++oc
+        int y = 0;
+        y < OUTPUT_H;
+        ++y
     ) {
 
-CONV2_Y:
+    CONV2_X:
         for (
-            int y = 0;
-            y < OUTPUT_H;
-            ++y
+            int x = 0;
+            x < OUTPUT_W;
+            ++x
         ) {
 
-CONV2_X:
+            feature_word_t packed =
+                0;
+
+
+        CONV2_OC:
             for (
-                int x = 0;
-                x < OUTPUT_W;
-                ++x
+                int oc = 0;
+                oc < CHANNELS;
+                ++oc
             ) {
 
                 int32_t acc =
                     CONV2_BIAS[oc];
 
 
-CONV2_IC:
+            CONV2_IC:
                 for (
                     int ic = 0;
-                    ic < 8;
+                    ic < CHANNELS;
                     ++ic
                 ) {
 
-CONV2_KY:
+                CONV2_KY:
                     for (
                         int ky = 0;
                         ky < 3;
                         ++ky
                     ) {
 
-CONV2_KX:
+                    CONV2_KX:
                         for (
                             int kx = 0;
                             kx < 3;
@@ -481,8 +548,9 @@ CONV2_KX:
 
                                 const int weight_index =
                                     (
-                                        oc * 8
-                                        + ic
+                                        oc * CHANNELS
+                                        +
+                                        ic
                                     )
                                     * 9
                                     +
@@ -491,12 +559,24 @@ CONV2_KX:
                                     kx;
 
 
+                                const feature_word_t word =
+                                    conv1_out[
+                                        iy
+                                    ][ix];
+
+
+                                const uint8_t activation =
+                                    (uint8_t)
+                                    word.range(
+                                        ic * 8 + 7,
+                                        ic * 8
+                                    );
+
+
                                 acc +=
                                     (
                                         (int32_t)
-                                        conv1_out[
-                                            ic
-                                        ][iy][ix]
+                                        activation
                                     )
                                     *
                                     (
@@ -514,8 +594,10 @@ CONV2_KX:
                 const int64_t product =
                     ((int64_t)acc)
                     *
-                    ((int64_t)
-                        CONV2_MULT[oc]);
+                    (
+                        (int64_t)
+                        CONV2_MULT[oc]
+                    );
 
 
                 const int64_t q =
@@ -525,15 +607,36 @@ CONV2_KX:
                     );
 
 
-                conv2_out[oc][y][x] =
+                const uint8_t q8 =
                     clamp_u8(q);
+
+
+                packed.range(
+                    oc * 8 + 7,
+                    oc * 8
+                ) = q8;
             }
+
+
+            conv2_out[y][x] =
+                packed;
         }
     }
 
 
     // ------------------------------------------------
-    // Conv3 + residual conversion + final add
+    // Conv3
+    //
+    // 8 input channels
+    // 1 output channel
+    // 3x3
+    // padding 1
+    //
+    // Followed by:
+    //     residual requantisation
+    //     residual-to-output conversion
+    //     skip addition
+    //     final clipping
     // ------------------------------------------------
 
 CONV3_Y:
@@ -543,7 +646,7 @@ CONV3_Y:
         ++y
     ) {
 
-CONV3_X:
+    CONV3_X:
         for (
             int x = 0;
             x < OUTPUT_W;
@@ -554,21 +657,21 @@ CONV3_X:
                 CONV3_BIAS[0];
 
 
-CONV3_IC:
+        CONV3_IC:
             for (
                 int ic = 0;
-                ic < 8;
+                ic < CHANNELS;
                 ++ic
             ) {
 
-CONV3_KY:
+            CONV3_KY:
                 for (
                     int ky = 0;
                     ky < 3;
                     ++ky
                 ) {
 
-CONV3_KX:
+                CONV3_KX:
                     for (
                         int kx = 0;
                         kx < 3;
@@ -600,12 +703,24 @@ CONV3_KX:
                                 kx;
 
 
+                            const feature_word_t word =
+                                conv2_out[
+                                    iy
+                                ][ix];
+
+
+                            const uint8_t activation =
+                                (uint8_t)
+                                word.range(
+                                    ic * 8 + 7,
+                                    ic * 8
+                                );
+
+
                             acc +=
                                 (
                                     (int32_t)
-                                    conv2_out[
-                                        ic
-                                    ][iy][ix]
+                                    activation
                                 )
                                 *
                                 (
@@ -623,8 +738,10 @@ CONV3_KX:
             const int64_t requant_product =
                 ((int64_t)acc)
                 *
-                ((int64_t)
-                    CONV3_MULT[0]);
+                (
+                    (int64_t)
+                    CONV3_MULT[0]
+                );
 
 
             const int64_t residual_q_raw =
@@ -643,8 +760,10 @@ CONV3_KX:
             const int64_t residual_product =
                 ((int64_t)residual_q)
                 *
-                ((int64_t)
-                    RESIDUAL_TO_OUTPUT_MULT);
+                (
+                    (int64_t)
+                    RESIDUAL_TO_OUTPUT_MULT
+                );
 
 
             const int64_t residual_ticks =
@@ -655,29 +774,36 @@ CONV3_KX:
 
 
             int32_t final_value =
-                ((int32_t)
-                    baseline_ticks[y][x])
+                (
+                    (int32_t)
+                    baseline_ticks[y][x]
+                )
                 +
-                ((int32_t)
-                    residual_ticks);
+                (
+                    (int32_t)
+                    residual_ticks
+                );
 
 
-            if (final_value < 0) {
+            if (
+                final_value < 0
+            ) {
                 final_value = 0;
             }
+
 
             if (
                 final_value > OUTPUT_DEN
             ) {
-                final_value = OUTPUT_DEN;
+                final_value =
+                    OUTPUT_DEN;
             }
 
 
             output[
                 y * OUTPUT_W + x
-            ] = (
-                (uint16_t)final_value
-            );
+            ] =
+                (uint16_t)final_value;
         }
     }
 }
