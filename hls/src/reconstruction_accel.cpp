@@ -212,6 +212,9 @@ void reconstruction_accel(
     static uint8_t branch_input
         [OUTPUT_H][OUTPUT_W];
 
+    static uint8_t conv1_line0[OUTPUT_W + 2];
+    static uint8_t conv1_line1[OUTPUT_W + 2];
+
     static feature_word_t conv1_out
         [OUTPUT_H][OUTPUT_W];
 
@@ -225,11 +228,15 @@ void reconstruction_accel(
     // makes much better use of the physical URAM width
     // than the previous eight-bit-wide memory layout.
 
+#pragma HLS bind_storage variable=conv1_line0 type=ram_s2p impl=bram
+#pragma HLS bind_storage variable=conv1_line1 type=ram_s2p impl=bram
+
 #pragma HLS bind_storage variable=conv1_out type=ram_1p impl=uram
 #pragma HLS bind_storage variable=conv2_out type=ram_1p impl=uram
 
+#pragma HLS ARRAY_PARTITION variable=CONV1_WEIGHTS cyclic factor=9 dim=1
 #pragma HLS ARRAY_PARTITION variable=CONV2_WEIGHTS cyclic factor=8 dim=1
-#pragma HLS ARRAY_PARTITION variable=CONV3_WEIGHTS cyclic factor=8 dim=1
+#pragma HLS ARRAY_PARTITION variable=CONV3_WEIGHTS block factor=8 dim=1
 
     // ------------------------------------------------
     // Integer 2x bilinear interpolation
@@ -346,123 +353,133 @@ BILINEAR_Y:
     // collected into a single 64-bit feature word.
     // ------------------------------------------------
 
-CONV1_Y:
-    for (
-        int y = 0;
-        y < OUTPUT_H;
-        ++y
-    ) {
+    uint8_t win00 = 0, win01 = 0, win02 = 0;
+    uint8_t win10 = 0, win11 = 0, win12 = 0;
+    uint8_t win20 = 0, win21 = 0, win22 = 0;
 
-    CONV1_X:
-        for (
-            int x = 0;
-            x < OUTPUT_W;
-            ++x
-        ) {
-
-            feature_word_t packed =
-                0;
-
-
-        CONV1_OC:
-            for (
-                int oc = 0;
-                oc < CHANNELS;
-                ++oc
-            ) {
+CONV1_Y_PAD:
+    for (int py = 0; py < OUTPUT_H + 2; ++py) {
+    CONV1_X_PAD:
+        for (int px = 0; px < OUTPUT_W + 2; ++px) {
 #pragma HLS PIPELINE off
 
-                int32_t acc =
-                    CONV1_BIAS[oc];
+            uint8_t current = 0;
 
-
-            CONV1_KY:
-                for (
-                    int ky = 0;
-                    ky < 3;
-                    ++ky
-                ) {
-
-                CONV1_KX:
-                    for (
-                        int kx = 0;
-                        kx < 3;
-                        ++kx
-                    ) {
-
-                        const int iy =
-                            y + ky - 1;
-
-                        const int ix =
-                            x + kx - 1;
-
-
-                        if (
-                            iy >= 0
-                            &&
-                            iy < OUTPUT_H
-                            &&
-                            ix >= 0
-                            &&
-                            ix < OUTPUT_W
-                        ) {
-
-                            const int weight_index =
-                                oc * 9
-                                +
-                                ky * 3
-                                +
-                                kx;
-
-
-                            acc +=
-                                (
-                                    (int32_t)
-                                    branch_input[
-                                        iy
-                                    ][ix]
-                                )
-                                *
-                                (
-                                    (int32_t)
-                                    CONV1_WEIGHTS[
-                                        weight_index
-                                    ]
-                                );
-                        }
-                    }
-                }
-
-
-                const int64_t product =
-                    ((int64_t)acc)
-                    *
-                    (
-                        (int64_t)
-                        CONV1_MULT[oc]
-                    );
-
-
-                const int64_t q =
-                    rounded_shift_signed(
-                        product,
-                        REQUANT_SHIFT
-                    );
-
-
-                const uint8_t q8 =
-                    clamp_u8(q);
-
-
-                packed.range(
-                    oc * 8 + 7,
-                    oc * 8
-                ) = q8;
+            if (
+                py > 0
+                &&
+                py <= OUTPUT_H
+                &&
+                px > 0
+                &&
+                px <= OUTPUT_W
+            ) {
+                current =
+                    branch_input[
+                        py - 1
+                    ][
+                        px - 1
+                    ];
             }
 
+            const uint8_t row_m2 =
+                conv1_line0[px];
 
-            conv1_out[y][x] =
-                packed;
+            const uint8_t row_m1 =
+                conv1_line1[px];
+
+            conv1_line0[px] =
+                row_m1;
+
+            conv1_line1[px] =
+                current;
+
+            if (px == 0) {
+                win00 = 0;
+                win01 = 0;
+                win02 = 0;
+                win10 = 0;
+                win11 = 0;
+                win12 = 0;
+                win20 = 0;
+                win21 = 0;
+                win22 = 0;
+            }
+
+            win00 = win01;
+            win01 = win02;
+            win02 = row_m2;
+
+            win10 = win11;
+            win11 = win12;
+            win12 = row_m1;
+
+            win20 = win21;
+            win21 = win22;
+            win22 = current;
+
+            if (
+                py >= 2
+                &&
+                px >= 2
+            ) {
+                feature_word_t packed =
+                    0;
+
+            CONV1_OC:
+                for (
+                    int oc = 0;
+                    oc < CHANNELS;
+                    ++oc
+                ) {
+#pragma HLS PIPELINE II=1
+
+#pragma HLS UNROLL factor=8
+                    const int weight_base =
+                        oc * 9;
+
+                    int32_t acc =
+                        CONV1_BIAS[oc];
+
+                    acc += (int32_t)win00 * (int32_t)CONV1_WEIGHTS[weight_base + 0];
+                    acc += (int32_t)win01 * (int32_t)CONV1_WEIGHTS[weight_base + 1];
+                    acc += (int32_t)win02 * (int32_t)CONV1_WEIGHTS[weight_base + 2];
+                    acc += (int32_t)win10 * (int32_t)CONV1_WEIGHTS[weight_base + 3];
+                    acc += (int32_t)win11 * (int32_t)CONV1_WEIGHTS[weight_base + 4];
+                    acc += (int32_t)win12 * (int32_t)CONV1_WEIGHTS[weight_base + 5];
+                    acc += (int32_t)win20 * (int32_t)CONV1_WEIGHTS[weight_base + 6];
+                    acc += (int32_t)win21 * (int32_t)CONV1_WEIGHTS[weight_base + 7];
+                    acc += (int32_t)win22 * (int32_t)CONV1_WEIGHTS[weight_base + 8];
+
+                    const int64_t product =
+                        ((int64_t)acc)
+                        *
+                        (
+                            (int64_t)
+                            CONV1_MULT[oc]
+                        );
+
+                    const int64_t q =
+                        rounded_shift_signed(
+                            product,
+                            REQUANT_SHIFT
+                        );
+
+                    const uint8_t q8 =
+                        clamp_u8(q);
+
+                    packed.range(
+                        oc * 8 + 7,
+                        oc * 8
+                    ) = q8;
+                }
+
+                conv1_out[
+                    py - 2
+                ][
+                    px - 2
+                ] = packed;
+            }
         }
     }
 
