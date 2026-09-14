@@ -361,7 +361,7 @@ CONV1_Y_PAD:
     for (int py = 0; py < OUTPUT_H + 2; ++py) {
     CONV1_X_PAD:
         for (int px = 0; px < OUTPUT_W + 2; ++px) {
-#pragma HLS PIPELINE off
+#pragma HLS PIPELINE II=1
 
             uint8_t current = 0;
 
