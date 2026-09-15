@@ -459,6 +459,8 @@ CONV1_Y_PAD:
                             CONV1_MULT[oc]
                         );
 
+                    #pragma HLS bind_op variable=product op=mul impl=dsp latency=2
+
                     const int64_t q =
                         rounded_shift_signed(
                             product,
