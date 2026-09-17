@@ -1,0 +1,604 @@
+================================================================
+== Vivado Place & Route Results
+================================================================
++ General Information:
+    * Date:            Tue Sep 15 03:07:55 +0100 2026
+    * Version:         2025.1 (Build 6214317 on Sep 11 2025)
+    * Project:         work
+    * Solution:        hls (Vivado IP Flow Target)
+    * Product family:  zynquplus
+    * Target device:   xck26-sfvc784-2LV-c
+
+
+================================================================
+== Run Constraints & Options
+================================================================
++ Design Constraints & Options:
+    * Place & Route target clock:  5 ns
+    * C-Synthesis target clock:    5 ns
+    * C-Synthesis uncertainty:     12%
+
++ RTL Synthesis Options:
+    * config_export -vivado_synth_strategy:     default
+    * config_export -vivado_synth_design_args:  -directive sdx_optimization_effort_high
+
++ Place & Route Options:
+    * config_export -vivado_impl_strategy:  default
+    * config_export -vivado_phys_opt:       auto
+
++ Reporting Options:
+    * config_export -vivado_report_level:      2
+    * config_export -vivado_max_timing_paths:  10
+
+
+================================================================
+== Place & Route Resource Summary
+================================================================
+LUT:              5848
+FF:               4467
+DSP:              69
+BRAM:             91
+URAM:             32
+SRL:              241
+
+
+================================================================
+== Place & Route Timing Summary
+================================================================
+* Timing was met
++----------------+-------------+
+| Timing         | Period (ns) |
++----------------+-------------+
+| Target         | 5.000       |
+| Post-Synthesis | 4.942       |
+| Post-Route     | 4.793       |
++----------------+-------------+
+
+
+================================================================
+== Place & Route Resources
+================================================================
++-------------------------------------------------------------------------------------------+------+------+-----+------+------+-----+--------+------+---------+----------+--------+
+| Name                                                                                      | LUT  | FF   | DSP | BRAM | URAM | SRL | Pragma | Impl | Latency | Variable | Source |
++-------------------------------------------------------------------------------------------+------+------+-----+------+------+-----+--------+------+---------+----------+--------+
+| inst                                                                                      | 5848 | 4467 | 69  | 91   | 32   |     |        |      |         |          |        |
+|   (inst)                                                                                  | 1    | 144  |     |      |      |     |        |      |         |          |        |
+|   baseline_ticks_U                                                                        |      |      |     |      |      |     |        |      |         |          |        |
+|   branch_input_U                                                                          |      |      |     |      |      |     |        |      |         |          |        |
+|   control_s_axi_U                                                                         | 158  | 181  |     |      |      |     |        |      |         |          |        |
+|   conv1_out_U                                                                             | 256  | 6    |     |      | 16   |     |        |      |         |          |        |
+|   conv2_out_U                                                                             | 256  | 6    |     |      | 16   |     |        |      |         |          |        |
+|   gmem0_m_axi_U                                                                           | 612  | 876  |     | 1    |      |     |        |      |         |          |        |
+|   gmem1_m_axi_U                                                                           | 808  | 1179 |     |      |      |     |        |      |         |          |        |
+|   grp_reconstruction_accel_Pipeline_BILINEAR_Y_BILINEAR_X_fu_154                          | 578  | 444  | 2   |      |      |     |        |      |         |          |        |
+|     (grp_reconstruction_accel_Pipeline_BILINEAR_Y_BILINEAR_X_fu_154)                      | 459  | 417  |     |      |      |     |        |      |         |          |        |
+|     ama_addmuladd_10ns_11ns_2ns_14ns_14_4_1_U10                                           | 51   | 14   | 1   |      |      |     |        |      |         |          |        |
+|     flow_control_loop_pipe_sequential_init_U                                              |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_2ns_11ns_11_4_1_U9                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_11ns_3ns_14_1_1_U8                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_3ns_8ns_11_1_1_U3                                                                 |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_3ns_8ns_11_1_1_U4                                                                 |      |      |     |      |      |     |        |      |         |          |        |
+|   grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166                        | 1105 | 524  | 45  | 2    |      |     |        |      |         |          |        |
+|     (grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166)                    | 206  | 486  | 7   |      |      |     |        |      |         |          |        |
+|     am_addmul_17s_17s_12ns_31_3_1_U58                                                     | 50   |      | 1   |      |      |     |        |      |         |          |        |
+|     am_addmul_17s_17s_12ns_31_3_1_U59                                                     | 81   |      | 1   |      |      |     |        |      |         |          |        |
+|     am_addmul_17s_17s_12ns_31_3_1_U60                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     conv1_line0_U                                                                         |      |      |     |      |      |     |        |      |         |          |        |
+|     conv1_line1_U                                                                         |      |      |     |      |      |     |        |      |         |          |        |
+|     flow_control_loop_pipe_sequential_init_U                                              |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_5ns_15ns_15_4_1_U52                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6ns_12ns_15_4_1_U46                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6ns_15ns_15_4_1_U44                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6ns_15ns_16_4_1_U40                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6ns_15ns_16_4_1_U51                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6ns_16ns_16_4_1_U37                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6s_14s_15_4_1_U57                                                      |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_6s_16s_16_4_1_U49                                                      |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_10ns_15_4_1_U47                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_13s_16_4_1_U43                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_14s_16_4_1_U50                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_15ns_16_4_1_U36                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_15ns_16_4_1_U45                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_15ns_16_4_1_U54                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_16ns_16_4_1_U41                                                    |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7ns_16s_16_4_1_U34                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7s_15ns_16_4_1_U39                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7s_17s_17_4_1_U56                                                      |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_8s_12ns_16_4_1_U53                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_8s_14s_16_4_1_U55                                                      |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_8s_15ns_16_4_1_U48                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_8s_15s_15_4_1_U38                                                      | 52   |      | 1   |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_8s_16s_17_4_1_U42                                                      |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_9s_7ns_14ns_17_4_1_U35                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_18s_12ns_30_3_1_U32                                                               | 67   |      | 1   |      |      |     |        |      |         |          |        |
+|     mul_18s_13ns_31_3_1_U30                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_18s_13ns_31_3_1_U33                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_19s_13ns_32_3_1_U31                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8ns_6s_14_1_1_U27                                                                 |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8ns_7ns_14_1_1_U29                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8ns_8ns_15_1_1_U24                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8ns_8ns_15_1_1_U26                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8ns_8ns_15_1_1_U28                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|   grp_reconstruction_accel_Pipeline_CONV2_Y_CONV2_X_CONV2_OC_CONV2_KY_CONV2_KX_fu_178     | 1483 | 779  | 11  |      |      |     |        |      |         |          |        |
+|     (grp_reconstruction_accel_Pipeline_CONV2_Y_CONV2_X_CONV2_OC_CONV2_KY_CONV2_KX_fu_178) | 352  | 429  | 1   |      |      |     |        |      |         |          |        |
+|     CONV2_BIAS_U                                                                          |      |      |     |      |      |     |        |      |         |          |        |
+|     CONV2_MULT_U                                                                          |      |      |     |      |      |     |        |      |         |          |        |
+|     flow_control_loop_pipe_sequential_init_U                                              | 68   | 2    |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_16s_17_4_1_U106                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_16s_17_4_1_U107                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_16s_17_4_1_U108                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_17s_18_4_1_U110                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_32s_32_4_1_U109                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_13ns_32s_45_1_1_U93                                                               | 73   |      | 2   |      |      |     |        |      |         |          |        |
+|     mul_8s_8ns_16_1_1_U102                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8s_8ns_16_1_1_U103                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8s_8ns_16_1_1_U104                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_0_U                                                               | 115  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_1_U                                                               | 106  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_2_U                                                               | 128  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_3_U                                                               | 108  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_4_U                                                               | 120  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_5_U                                                               | 120  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_6_U                                                               | 106  | 40   |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV2_WEIGHTS_7_U                                                               | 142  | 40   |     |      |      |     |        |      |         |          |        |
+|   grp_reconstruction_accel_Pipeline_CONV3_Y_CONV3_X_CONV3_KY_CONV3_KX_fu_206              | 563  | 326  | 11  |      |      |     |        |      |         |          |        |
+|     (grp_reconstruction_accel_Pipeline_CONV3_Y_CONV3_X_CONV3_KY_CONV3_KX_fu_206)          | 465  | 286  | 3   |      |      |     |        |      |         |          |        |
+|     flow_control_loop_pipe_sequential_init_U                                              |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_5s_16s_16_4_1_U143                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7s_16s_17_4_1_U141                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8ns_7s_16s_17_4_1_U142                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_17s_17_4_1_U145                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mac_muladd_8s_8ns_32s_32_4_1_U144                                                     |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8s_25ns_32_1_1_U140                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8s_8ns_16_1_1_U137                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     mul_8s_8ns_16_1_1_U139                                                                |      |      |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV3_WEIGHTS_0_U                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV3_WEIGHTS_2_U                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV3_WEIGHTS_3_U                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV3_WEIGHTS_5_U                                                               |      |      |     |      |      |     |        |      |         |          |        |
+|     p_ZL13CONV3_WEIGHTS_6_U                                                               |      |      |     |      |      |     |        |      |         |          |        |
++-------------------------------------------------------------------------------------------+------+------+-----+------+------+-----+--------+------+---------+----------+--------+
+
+
+================================================================
+== Place & Route Fail Fast
+================================================================
++-----------------------------------------------------------+-----------+--------+--------+
+| Criteria                                                  | Guideline | Actual | Status |
++-----------------------------------------------------------+-----------+--------+--------+
+| LUT                                                       | 70%       | 4.99%  | OK     |
+| FD                                                        | 50%       | 1.91%  | OK     |
+| LUTRAM+SRL                                                | 25%       | 0.42%  | OK     |
+| CARRY8                                                    | 25%       | 2.06%  | OK     |
+| MUXF7                                                     | 15%       | 1.04%  | OK     |
+| DSP                                                       | 80%       | 5.53%  | OK     |
+| RAMB/FIFO                                                 | 80%       | 31.60% | OK     |
+| URAM                                                      | 80%       | 50.00% | OK     |
+| DSP+RAMB+URAM (Avg)                                       | 70%       | 29.04% | OK     |
+| BUFGCE* + BUFGCTRL                                        | 24        | 0      | OK     |
+| DONT_TOUCH (cells/nets)                                   | 0         | 0      | OK     |
+| MARK_DEBUG (nets)                                         | 0         | 0      | OK     |
+| Control Sets                                              | 2196      | 187    | OK     |
+| Average Fanout for modules > 100k cells                   | 4         | 1.17   | OK     |
+| Max Average Fanout for modules > 100k cells               | 4         | 0      | OK     |
+| Non-FD high fanout nets > 10k loads                       | 0         | 0      | OK     |
++-----------------------------------------------------------+-----------+--------+--------+
+| TIMING-6 (No common primary clock between related clocks) | 0         | 0      | OK     |
+| TIMING-7 (No common node between related clocks)          | 0         | 0      | OK     |
+| TIMING-8 (No common period between related clocks)        | 0         | 0      | OK     |
+| TIMING-14 (LUT on the clock tree)                         | 0         | 0      | OK     |
+| TIMING-35 (No common node in paths with the same clock)   | 0         | 0      | OK     |
++-----------------------------------------------------------+-----------+--------+--------+
+| Number of paths above max LUT budgeting (0.391ns)         | 0         | 0      | OK     |
+| Number of paths above max Net budgeting (0.263ns)         | 0         | 0      | OK     |
++-----------------------------------------------------------+-----------+--------+--------+
+
+
+================================================================
+== Place & Route Timing Paths
+================================================================
+* Timing was met
++-------+-------+---------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+--------------+------------+----------------+----------------+--------------+
+| Path  | SLACK | STARTPOINT PIN                                                                                                            | ENDPOINT PIN                                                                                                               | LOGIC LEVELS | MAX FANOUT | DATAPATH DELAY | DATAPATH LOGIC | DATAPATH NET |
+|       |       |                                                                                                                           |                                                                                                                            |              |            |                |          DELAY |        DELAY |
++-------+-------+---------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+--------------+------------+----------------+----------------+--------------+
+| Path1 | 0.207 | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST/CLK | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST/A[29]             |           12 |         26 |          4.214 |          3.005 |        1.209 |
+| Path2 | 0.223 | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST/CLK | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST/A[17] |           12 |         26 |          4.227 |          3.005 |        1.222 |
+| Path3 | 0.240 | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST/CLK | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST/A[20]             |           12 |         26 |          4.188 |          3.005 |        1.183 |
+| Path4 | 0.245 | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST/CLK | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST/A[28]             |           12 |         26 |          4.141 |          3.005 |        1.136 |
+| Path5 | 0.253 | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST/CLK | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST/A[18] |           12 |         26 |          4.183 |          3.005 |        1.178 |
++-------+-------+---------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+--------------+------------+----------------+----------------+--------------+
+
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | Path1 Cells                                                                                                                                                                                  | Primitive Type         |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | Path2 Cells                                                                                                                                                                                  | Primitive Type         |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | Path3 Cells                                                                                                                                                                                  | Primitive Type         |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | Path4 Cells                                                                                                                                                                                  | Primitive Type         |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | Path5 Cells                                                                                                                                                                                  | Primitive Type         |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/add_ln39_1_fu_2022_p2/DSP_A_B_DATA_INST                                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_A_B_DATA_INST                                                                        | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_PREADD_DATA_INST                                                                     | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_MULTIPLIER_INST                                                                      | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_M_DATA_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_ALU_INST                                                                             | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_8ns_8ns_15_1_1_U28/tmp_product/DSP_OUTPUT_INST                                                                          | ARITHMETIC.DSP.DSP48E2 |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_76 | CLB.LUT.LUT2           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_42 | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_24 | CLB.LUT.LUT3           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_31 | CLB.LUT.LUT4           |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_3  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_2  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mac_muladd_8ns_7ns_16ns_16_4_1_U41/reconstruction_accel_mac_muladd_8ns_7ns_16ns_16_4_1_DSP48_0_U/add_ln39_1_fu_2022_p2_i_1  | CLB.CARRY.CARRY8       |
+    | grp_reconstruction_accel_Pipeline_CONV1_Y_PAD_CONV1_X_PAD_fu_166/mul_18s_12ns_30_3_1_U32/buff0_reg/DSP_A_B_DATA_INST                                                                         | ARITHMETIC.DSP.DSP48E2 |
+    +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+
+
+================================================================
+== Place & Route Vivado Reports
+================================================================
++--------------------------+------------------------------------------------------------------------------+
+| Report Type              | Report Location                                                              |
++--------------------------+------------------------------------------------------------------------------+
+| design_analysis          | impl/verilog/report/reconstruction_accel_design_analysis_routed.rpt          |
+| failfast                 | impl/verilog/report/reconstruction_accel_failfast_routed.rpt                 |
+| power                    | impl/verilog/report/reconstruction_accel_power_routed.rpt                    |
+| status                   | impl/verilog/report/reconstruction_accel_status_routed.rpt                   |
+| timing                   | impl/verilog/report/reconstruction_accel_timing_routed.rpt                   |
+| timing_paths             | impl/verilog/report/reconstruction_accel_timing_paths_routed.rpt             |
+| utilization              | impl/verilog/report/reconstruction_accel_utilization_routed.rpt              |
+| utilization_hierarchical | impl/verilog/report/reconstruction_accel_utilization_hierarchical_routed.rpt |
++--------------------------+------------------------------------------------------------------------------+
+
+

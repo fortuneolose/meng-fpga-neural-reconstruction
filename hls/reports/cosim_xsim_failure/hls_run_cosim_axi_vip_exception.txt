@@ -1,0 +1,85 @@
+Excerpt of hls/work/logs/hls_run_cosim.log (848 lines, 89,223 bytes,
+2026-09-13 20:55:13). The full log lives in the ignored hls/work/ tree.
+
+Source state:  commit 8c847cd "hls: parallelize Conv3 input channels"
+               (the last commit before this run; the next commit, 6a8451b,
+               only added report files)
+Tool:          Vitis HLS / XSIM 2025.1.1, C:/Xilinx/2025.1.1
+Verdict:       C/RTL co-simulation FAIL  (see hls_cosim.rpt)
+
+This is an XSim simulator KERNEL EXCEPTION raised inside the HLS-generated
+AXI VIP slave sequence. It is NOT a demonstrated arithmetic mismatch between
+the C model and the RTL: the RTL testbench terminated with 0 of 1
+transactions completed, so no output was ever compared.
+
+NOTE ON THE C TESTBENCH PASS BELOW: "HLS C MODEL VERIFICATION: PASS" is the
+CSim stage that Vitis runs at the START of a cosim run, before any RTL
+simulation. It says nothing about RTL correctness. (The separate file
+csim_c_model_pass.txt in this directory -- committed in 6a8451b as
+run_xsim.txt -- contains only this CSim stage output. See README.md.)
+
+================================================================================
+[1] Cosim start, C testbench stage  (log lines 33-53)
+================================================================================
+INFO: [COSIM 212-47] Using XSIM for RTL simulation.
+INFO: [COSIM 212-14] Instrumenting C test bench ...
+   Build using "C:/Xilinx/2025.1.1/Vitis/win64/tools/vcxx/libexec/clang++"
+   Compiling test_reconstruction.cpp_pre.cpp.tb.cpp
+   Compiling reconstruction_accel.cpp_pre.cpp.tb.cpp
+   Compiling apatb_reconstruction_accel.cpp
+   Compiling apatb_reconstruction_accel_ir.ll
+   Generating cosim.tv.exe
+INFO: [COSIM 212-302] Starting C TB testing ...
+Golden-vector root: ../../../../tb/data
+
+0805: BIT-EXACT PASS
+
+All 3 golden vectors matched exactly.
+Maximum allowed difference: 0 ticks
+HLS C MODEL VERIFICATION: PASS
+INFO: [COSIM 212-333] Generating C post check test bench ...
+INFO: [COSIM 212-12] Generating RTL test bench ...
+INFO: [COSIM 212-1] *** C/RTL co-simulation file generation completed. ***
+INFO: [COSIM 212-323] Starting verilog simulation.
+INFO: [COSIM 212-15] Starting XSIM ...
+
+================================================================================
+[2] Simulator build identification  (log lines 410-414)
+================================================================================
+****** xsim v2025.1.1 (64-bit)
+  **** SW Build 6233196 on Thu Sep 11 21:27:30 MDT 2025
+  **** IP Build 6232796 on Fri Sep 12 01:46:16 MDT 2025
+  **** SharedData Build 6233195 on Thu Sep 11 17:56:43 MDT 2025
+  **** Start of session at: Sun Sep 13 20:51:54 2026
+
+================================================================================
+[3] RTL simulation failure  (log lines 832-846)  <-- THE EVIDENCE
+================================================================================
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 1 [0.00%] @ "113000"
+FATAL_ERROR: Vivado Simulator kernel has discovered an exceptional condition from which it cannot recover. Process will terminate. For technical support on this issue, please open a WebCase with this project attached at http://www.xilinx.com/support.
+Time: 13596837600 ps  Iteration: 0  Process: /axi_pkg/axi_slave_sequence(ADDR_WIDTH=64,STRB_WIDTH=4,LEN_WIDTH=8)::body/Block99_379
+  File: C:/Users/avent/meng-fpga-neural-reconstruction/hls/work/hls/sim/verilog/axivip/axi_slave_seq_lib.sv
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:02:50 . Memory (MB): peak = 174.371 ; gain = 0.000
+## quit
+INFO: xsimkernel Simulation Memory Usage: 3424312 KB (Peak: 3424312 KB), Simulation CPU Usage: 166062 ms
+INFO: [Common 17-206] Exiting xsim at Sun Sep 13 20:55:11 2026...
+ERROR: [COSIM 212-4] *** C/RTL co-simulation finished: FAIL ***
+INFO: [COSIM 212-211] II is measurable only when transaction number is greater than 1 in RTL simulation. Otherwise, they will be marked as all NA. If user wants to calculate them, please make sure there are at least 2 transactions in RTL simulation.
+
+================================================================================
+Reading of the failure
+================================================================================
+- STRB_WIDTH=4 in the failing sequence confirms the 32-bit m_axi gmem data
+  width (component.xml: C_M_AXI_GMEM0/1_DATA_WIDTH = 32, 64-bit address).
+- 0 / 1 transactions completed: the kernel died before the single
+  ap_ctrl transaction retired, so no golden comparison was reached.
+- The crash is in Xilinx-supplied AXI VIP library code
+  (hls/work/hls/sim/verilog/axivip/axi_slave_seq_lib.sv), not in
+  generated design RTL.
+- Consequence: the design has NO passing RTL-level verification.
+  CSim is bit-exact; cosim has never completed.
