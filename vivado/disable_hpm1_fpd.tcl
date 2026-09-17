@@ -1,0 +1,1 @@
+open_project [file normalize "../vivado/kv260_project/neural_reconstruction_kv260.xpr"]; open_bd_design [get_files -quiet */neural_reconstruction_bd.bd]; set_property CONFIG.PSU__USE__M_AXI_GP1 0 [get_bd_cells zynq_ultra_ps_e_0]; save_bd_design 

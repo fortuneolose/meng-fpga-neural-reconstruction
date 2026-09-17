@@ -1,0 +1,1 @@
+open_project V:/neural_reconstruction_kv260.xpr; set_property platform.design_intent.embedded true [current_project]; puts "EMBEDDED_INTENT_NOW=[get_property platform.design_intent.embedded [current_project]]"; open_run impl_1; write_hw_platform -fixed -include_bit -force -file V:/neural_reconstruction_kv260_embedded.xsa; puts "XSA=V:/neural_reconstruction_kv260_embedded.xsa" 

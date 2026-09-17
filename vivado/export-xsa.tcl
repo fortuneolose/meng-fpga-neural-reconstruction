@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; write_hw_platform -fixed -include_bit -force -file [file normalize {../vivado/neural_reconstruction_kv260.xsa}]; puts {=== XSA EXPORT COMPLETE ===}

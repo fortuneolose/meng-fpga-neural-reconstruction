@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; set_property ip_repo_paths [file normalize {../vivado/ip_repo}] [current_project]; update_ip_catalog; report_ip_status; save_project

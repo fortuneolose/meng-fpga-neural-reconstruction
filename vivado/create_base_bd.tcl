@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; open_bd_design [get_files -quiet */neural_reconstruction_bd.bd]; create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e:3.5 zynq_ultra_ps_e_0; create_bd_cell -type ip -vlnv xilinx.com:hls:reconstruction_accel:1.0 reconstruction_accel_0; save_bd_design

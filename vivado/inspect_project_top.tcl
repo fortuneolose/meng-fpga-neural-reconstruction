@@ -1,0 +1,1 @@
+open_project V:/neural_reconstruction_kv260.xpr; set_property ip_repo_paths M:/vivado/ip_repo [current_project]; update_ip_catalog; puts "TOP=[get_property TOP [current_fileset]]"; puts "WRAPPERS=[get_files -quiet *neural_reconstruction_bd_wrapper*]" 

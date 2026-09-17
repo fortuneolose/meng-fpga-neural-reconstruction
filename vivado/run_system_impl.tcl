@@ -1,0 +1,1 @@
+open_project V:/neural_reconstruction_kv260.xpr; set_property ip_repo_paths M:/vivado/ip_repo [current_project]; update_ip_catalog; reset_run impl_1; launch_runs impl_1 -to_step route_design -jobs 8; wait_on_run impl_1; puts "IMPL_STATUS=[get_property STATUS [get_runs impl_1]]" 

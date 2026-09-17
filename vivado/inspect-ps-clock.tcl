@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; open_bd_design [get_files */neural_reconstruction_bd.bd]; set ps [get_bd_cells zynq_ultra_ps_e_0]; puts {=== PS CLOCK PROPERTIES ===}; foreach prop [list_property $ps] {if {[string match *FREQMHZ* $prop] || [string match *PL0_REF* $prop]} {puts "$prop = [get_property $prop $ps]"}}

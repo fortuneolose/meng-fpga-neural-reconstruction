@@ -1,0 +1,1 @@
+open_project [file normalize "../vivado/kv260_project/neural_reconstruction_kv260.xpr"]; puts "BOARD_PART=[get_property board_part [current_project]]"; puts "IP_REPO=[get_property ip_repo_paths [current_project]]"; puts "ACCEL_IP=[get_ipdefs -all -quiet xilinx.com:hls:reconstruction_accel:1.0]" 

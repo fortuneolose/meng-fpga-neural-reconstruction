@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; open_bd_design [get_files */neural_reconstruction_bd.bd]; puts {=== INTERFACE NETS ===}; foreach n [get_bd_intf_nets] {puts "$n : [get_bd_intf_pins -of_objects $n]"}; puts {=== SCALAR NETS ===}; foreach n [get_bd_nets] {puts "$n : [get_bd_pins -of_objects $n]"}

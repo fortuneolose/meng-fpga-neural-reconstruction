@@ -1,0 +1,1 @@
+open_project [file normalize "../vivado/kv260_project/neural_reconstruction_kv260.xpr"]; open_bd_design [get_files -quiet */neural_reconstruction_bd.bd]; puts "PS_INTERFACES:"; foreach p [get_bd_intf_pins zynq_ultra_ps_e_0/*] {puts [get_property NAME $p]}; puts "ACCEL_INTERFACES:"; foreach p [get_bd_intf_pins reconstruction_accel_0/*] {puts [get_property NAME $p]} 

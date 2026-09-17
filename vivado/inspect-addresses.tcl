@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; open_bd_design [get_files */neural_reconstruction_bd.bd]; puts {=== ADDRESS SPACES ===}; foreach s [get_bd_addr_spaces] {puts "SPACE: $s"; foreach seg [get_bd_addr_segs -of_objects $s] {puts "  SEG: $seg OFFSET=[get_property OFFSET $seg] RANGE=[get_property RANGE $seg]"}}

@@ -1,0 +1,1 @@
+open_project [file normalize "../vivado/kv260_project/neural_reconstruction_kv260.xpr"]; open_bd_design [get_files -quiet */neural_reconstruction_bd.bd]; assign_bd_address -offset 0x00000000 -range 2G -target_address_space [get_bd_addr_spaces reconstruction_accel_0/Data_m_axi_gmem1] [get_bd_addr_segs zynq_ultra_ps_e_0/SAXIGP3/HP1_DDR_LOW]; save_bd_design 

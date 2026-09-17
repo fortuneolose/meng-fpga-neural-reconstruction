@@ -1,0 +1,1 @@
+open_project V:/neural_reconstruction_kv260.xpr; set_property ip_repo_paths M:/vivado/ip_repo [current_project]; update_ip_catalog; launch_runs impl_1 -to_step write_bitstream -jobs 4; wait_on_run impl_1; puts "BITSTREAM_STATUS=[get_property STATUS [get_runs impl_1]]" 

@@ -1,0 +1,1 @@
+open_project [file normalize "../vivado/kv260_project/neural_reconstruction_kv260.xpr"]; open_bd_design [get_files -quiet */neural_reconstruction_bd.bd]; foreach p [list_property [get_bd_cells zynq_ultra_ps_e_0]] { if {[string match "*HPM*" $p]} { puts "$p = [get_property $p [get_bd_cells zynq_ultra_ps_e_0]]" } } 

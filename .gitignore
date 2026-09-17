@@ -32,3 +32,22 @@ hls/reconstruction_hls/
 .idea/
 .DS_Store
 Thumbs.db
+# KV260/Vivado integration generated products
+vivado/kv260_project/*.gen/
+vivado/kv260_project/*.srcs/sources_1/bd/*/ip/
+vivado/kv260_project/*.srcs/sources_1/bd/*/*.bda
+vivado/kv260_project/*.xpr
+vivado/kv260_project/*.xsa
+vivado/*.xsa
+/dfx_runtime.txt
+/hls/dfx_runtime.txt
+/hls/powershell
+/hls/vitis_journal.py*
+/vitis_workspace/
+
+# Loose profiling / report files that Vivado and the report_* Tcl rewrite into
+# the project directory on every run. Curated copies of these two reports are
+# tracked under vivado/reports/system_routed/ -- see its PROVENANCE.md.
+vivado/kv260_project/dfx_runtime.txt
+vivado/kv260_project/system_utilization_routed.rpt
+vivado/kv260_project/system_utilization_summary_routed.rpt

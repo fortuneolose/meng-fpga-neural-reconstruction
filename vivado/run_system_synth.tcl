@@ -1,0 +1,1 @@
+open_project V:/neural_reconstruction_kv260.xpr; set_property ip_repo_paths M:/vivado/ip_repo [current_project]; update_ip_catalog; set_property top neural_reconstruction_bd_wrapper [current_fileset]; reset_run synth_1; launch_runs synth_1 -jobs 8; wait_on_run synth_1; puts "SYNTH_STATUS=[get_property STATUS [get_runs synth_1]]" 

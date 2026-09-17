@@ -1,0 +1,1 @@
+open_project [file normalize "../vivado/kv260_project/neural_reconstruction_kv260.xpr"]; open_bd_design [get_files -quiet */neural_reconstruction_bd.bd]; foreach p [list_property [get_bd_cells sc_gmem0]] { if {[string match "*USER*" $p]} { puts "$p = [get_property $p [get_bd_cells sc_gmem0]]" } } 

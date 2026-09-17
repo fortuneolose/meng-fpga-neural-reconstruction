@@ -1,0 +1,1 @@
+open_project [file normalize {../vivado/kv260_project/neural_reconstruction_kv260.xpr}]; puts {=== RUN STATUS ===}; foreach r [get_runs] {puts "RUN: $r STATUS=[get_property STATUS $r] PROGRESS=[get_property PROGRESS $r]"; foreach prop [list_property $r] {if {[string match *NEEDS_REFRESH* $prop]} {puts "  $prop=[get_property $prop $r]"}}}

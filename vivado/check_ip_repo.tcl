@@ -1,0 +1,1 @@
+create_project -in_memory -part xck26-sfvc784-2LV-c; set_property ip_repo_paths [file normalize "../vivado/ip_repo"] [current_project]; update_ip_catalog; puts "RECONSTRUCTION_IP=[get_ipdefs -all xilinx.com:hls:reconstruction_accel:1.0]" 
