@@ -1,0 +1,5 @@
+rtl_verify
+--runall
+--testplusarg CASES=3
+--testplusarg STALL=0
+--log baseline_complete.log
