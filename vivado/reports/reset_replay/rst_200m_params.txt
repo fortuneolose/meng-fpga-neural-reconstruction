@@ -1,0 +1,20 @@
+rst_200m C_EXT_RESET_HIGH — replayed vs authoritative
+======================================================================
+
+--- REPLAYED (throwaway project, full documented build sequence) ---
+XCI:
+  "C_EXT_RESET_HIGH": [ { "value": "1", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "long", "usage": "all" } 
+  "C_EXT_RESET_HIGH": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } 
+generated VHDL:
+  138:      C_EXT_RESET_HIGH => '1',
+
+--- AUTHORITATIVE (shipped design, vivado/kv260_project) ---
+XCI:
+  "C_EXT_RESET_HIGH": [ { "value": "1", "value_src": "propagated", "value_permission": "bd", "resolve_type": "user", "format": "long", "usage": "all" } 
+  "C_EXT_RESET_HIGH": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } 
+generated VHDL:
+  144:      C_EXT_RESET_HIGH => '1',
+
+======================================================================
+Identical. value_permission="bd" marks the parameter read-only to the
+user; value_src="propagated" marks it derived by BD propagation.

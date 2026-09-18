@@ -5,7 +5,10 @@ that referenced them by path breaks). This file is the categorization; it does
 not change behaviour.
 
 > ⚠️ **Read "Known defects in the build sequence" before replaying anything.**
-> The scripts as written do **not** reproduce the shipped design.
+> The scripts as written cannot reproduce the shipped design, because **none of
+> them creates the block design**. A reviewable from-scratch description now
+> exists at `vivado/neural_reconstruction_bd.tcl`, exported from the
+> authoritative `.bd`.
 
 ## Invocation conventions (two, undocumented until now)
 
@@ -30,8 +33,8 @@ Applied in this order to build the design. Timestamps are the real sequence.
 | 4 | `enable_hp_ports.tcl` | Enable `S_AXI_GP2` / `S_AXI_GP3` (HP0/HP1) |
 | 5 | `set_pl_clk0_200.tcl` | `PL0_REF_CTRL` → 200 MHz |
 | 6 | `connect_accel_clock.tcl` | `pl_clk0` → `ap_clk`, `maxihpm0_fpd_aclk`, `saxihp0/1_fpd_aclk` |
-| 7 | `add_reset_200m.tcl` | Add `proc_sys_reset` + `xlconstant`; ⚠️ sets `C_EXT_RESET_HIGH 0` |
-| 8 | `fix_reset_polarity.tcl` | ⚠️ Insert `util_vector_logic` NOT on `pl_resetn0` — **does not restore the polarity property** |
+| 7 | `add_reset_200m.tcl` | Add `proc_sys_reset` + `xlconstant`; its `set_property C_EXT_RESET_HIGH 0` is **dead code** — the property is read-only (see defect 2) |
+| 8 | `fix_reset_polarity.tcl` | Insert `util_vector_logic` NOT on `pl_resetn0`. This is the **real** polarity fix and it is correct — the property cannot be set, so inverting the signal is the only remedy |
 | 9 | `connect_hpm1_clock.tcl` | `pl_clk0` → `maxihpm1_fpd_aclk` |
 | 10 | `disable_hpm1_fpd.tcl` | Disable `M_AXI_GP1` (supersedes #9) |
 | 11 | `connect_gmem0_smartconnect.tcl` | `sc_gmem0`: accel `m_axi_gmem0` → `S_AXI_HP0_FPD` |
@@ -50,31 +53,55 @@ Applied in this order to build the design. Timestamps are the real sequence.
 
 ### Known defects in the build sequence
 
-1. **No script creates the block design.** There is no `create_bd_design` and no
-   `write_bd_tcl` anywhere in the 60 scripts. Every script does
+1. **No script creates the block design.** ⚠️ **This is the real reproduction
+   blocker.** There is no `create_bd_design` and no `write_bd_tcl` anywhere in
+   the 60 scripts. Every script does
    `open_bd_design [get_files */neural_reconstruction_bd.bd]` on a BD that must
    already exist, and `create_kv260_project.tcl` never adds the `.bd` to the
    project. **The `.bd` file is therefore the authoritative design description**,
    not this script set.
-2. **Reset polarity contradiction.** `add_reset_200m.tcl` sets
-   `CONFIG.C_EXT_RESET_HIGH 0` and wires `pl_resetn0` straight in;
-   `fix_reset_polarity.tcl` later inserts an inverter but never restores the
-   property. The **shipped** design has `C_EXT_RESET_HIGH = 1` (verified in the
-   generated XCI, `value_src="propagated"`; the `.bd` records no override), so
-   inverter + active-high is correct. Replaying both scripts gives active-**low**
-   `ext_reset_in` fed by an inverted `pl_resetn0` → **reset held asserted forever.**
+
+   **Mitigated 2026-09-18:** `vivado/neural_reconstruction_bd.tcl`, exported with
+   `write_bd_tcl`, calls `create_bd_design` + `create_root_design` and is a
+   genuine from-scratch description. Its one prerequisite is that
+   `ip_repo_paths` point at `vivado/ip_repo/` so the HLS IP resolves.
+
+2. **Reset polarity — tested 2026-09-18, not a defect.** This entry previously
+   claimed that replaying both scripts left reset asserted forever. **A
+   controlled replay disproved that.**
+
+   `C_EXT_RESET_HIGH` on `proc_sys_reset:5.0` is owned by BD parameter
+   propagation (`value_permission="bd"`) and is **read-only**. The
+   `set_property … 0` in `add_reset_200m.tcl` is rejected:
+
+   ```
+   CRITICAL WARNING: [BD 41-737] Cannot set the parameter C_EXT_RESET_HIGH
+                     on /rst_200m. It is read-only.
+   ```
+
+   A full replay measured the value as **1 at every stage** — before and after
+   the `set_property`, after both reset scripts, after `validate_bd_design` and
+   after `generate_target all`. The replayed XCI and generated VHDL match the
+   shipped design, and the replayed BD has identical cells, nets and reset
+   topology. Step 7 does leave a genuine transient mismatch (active-low
+   `pl_resetn0` into an active-high input); step 8 is what repairs it. The
+   `set_property` line is dead code — misleading, but harmless. Full detail in
+   `docs/PROJECT_STATE.md` §6.1.
+
 3. **Unportable paths** — see the invocation conventions above.
 
-Until #1 and #2 are fixed, reproduce from the `.bd`, not from these scripts.
+Reproduce from the `.bd`, or from `vivado/neural_reconstruction_bd.tcl` which is
+derived from it. Defect #1 is the reason; #2 is resolved and #3 remains.
 
 ---
 
-## 2. Validation / reporting (9)
+## 2. Validation / reporting (11)
 
 Read-only or report-producing; safe to re-run.
 
 | Script | Purpose |
 |---|---|
+| `assert_reset_topology.tcl` | **Read-only** regression guard: asserts `pl_resetn0 -> resetn_inverter/Op1`, `resetn_inverter/Res -> rst_200m/ext_reset_in` and `C_EXT_RESET_HIGH == 1`. Fails loudly (non-zero exit). Never mutates — no `set_property`, no `connect_bd_net`, no `save_bd_design` |
 | `check_kv260_board.tcl` | List available `*kv260*` board parts |
 | `check_ip_repo.tcl` | In-memory project; confirm the accelerator IP def resolves |
 | `verify_kv260_project.tcl` | Print `board_part`, `ip_repo_paths`, accelerator IP def |
@@ -86,6 +113,24 @@ Read-only or report-producing; safe to re-run.
 | `report_system_utilization_summary.tcl` | → `system_utilization_summary_routed.rpt` |
 
 Output of the last two is preserved in `vivado/reports/system_routed/`.
+`assert_reset_topology.tcl` evidence is in `vivado/reports/reset_replay/`.
+
+### Reproduction entry point (outside the 60 historical scripts)
+
+| Script | Purpose |
+|---|---|
+| `replay_bd.tcl` | Portable wrapper: derives all paths from `[info script]`, points `ip_repo_paths` at the committed `vivado/ip_repo`, runs `update_ip_catalog`, then sources `neural_reconstruction_bd.tcl`. Builds the block design only — no synthesis, implementation, bitstream or XSA |
+| `neural_reconstruction_bd.tcl` | `write_bd_tcl` export of the authoritative `.bd`. **Generated — do not hand-edit** |
+
+Usage:
+
+```
+vivado -mode batch -source vivado/replay_bd.tcl -tclargs <short_path_outside_repo>
+vivado -mode batch -source vivado/assert_reset_topology.tcl -tclargs <that_dir>/replay_bd.xpr
+```
+
+Keep the output path short: Vivado hits the Windows 260-byte `MAX_PATH` limit on
+deep BD/IP paths.
 
 ---
 

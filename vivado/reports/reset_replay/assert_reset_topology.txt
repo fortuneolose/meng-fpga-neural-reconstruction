@@ -1,0 +1,38 @@
+assert_reset_topology.tcl — run against the AUTHORITATIVE design
+vivado -mode batch -source vivado/assert_reset_topology.tcl \
+       -tclargs vivado/kv260_project/neural_reconstruction_kv260.xpr
+exit code 0
+======================================================================
+Block design: neural_reconstruction_bd
+ASSERT OK   | cell present: zynq_ultra_ps_e_0
+ASSERT OK   | cell present: resetn_inverter
+ASSERT OK   | cell present: rst_200m
+ASSERT OK   | resetn_inverter C_OPERATION = not
+ASSERT OK   | pl_resetn0 -> resetn_inverter/Op1
+ASSERT OK   | resetn_inverter/Res -> rst_200m/ext_reset_in
+ASSERT OK   | rst_200m C_EXT_RESET_HIGH = 1
+ASSERT_RESET_TOPOLOGY_PASS
+======================================================================
+
+Same script against the wrapper-reproduced design
+(vivado/replay_bd.tcl output) — exit code 0:
+Block design: neural_reconstruction_bd
+ASSERT OK   | cell present: zynq_ultra_ps_e_0
+ASSERT OK   | cell present: resetn_inverter
+ASSERT OK   | cell present: rst_200m
+ASSERT OK   | resetn_inverter C_OPERATION = not
+ASSERT OK   | pl_resetn0 -> resetn_inverter/Op1
+ASSERT OK   | resetn_inverter/Res -> rst_200m/ext_reset_in
+ASSERT OK   | rst_200m C_EXT_RESET_HIGH = 1
+ASSERT_RESET_TOPOLOGY_PASS
+======================================================================
+
+Negative control: same script against an empty block design
+(no cells) — must fail loudly, exit code 1:
+ASSERT FAIL | cell missing: zynq_ultra_ps_e_0
+ASSERT FAIL | cell missing: resetn_inverter
+ASSERT FAIL | cell missing: rst_200m
+ASSERT FAIL | pl_resetn0 does not drive resetn_inverter/Op1 (net pins: )
+ASSERT FAIL | rst_200m/ext_reset_in is not driven by resetn_inverter/Res (net pins: )
+ASSERT_RESET_TOPOLOGY_FAIL: 5 check(s) failed
+ASSERT_RESET_TOPOLOGY_FAIL: 5 check(s) failed

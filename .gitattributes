@@ -20,3 +20,8 @@ hls/reports/standalone_rtl_sim/xelab_verify.txt -text
 hls/reports/standalone_rtl_stress/stress_complete.txt -text
 hls/reports/standalone_rtl_stress/stress_scout.txt -text
 hls/reports/standalone_rtl_stress/xelab_stress.txt -text
+
+# Reset replay experiment — vivado/reports/reset_replay/PROVENANCE.md
+vivado/reports/reset_replay/replay_console.txt -text
+vivado/reports/reset_replay/rst_200m_params.txt -text
+vivado/reports/reset_replay/assert_reset_topology.txt -text

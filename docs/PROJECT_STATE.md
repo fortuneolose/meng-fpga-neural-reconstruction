@@ -258,13 +258,34 @@ board execution.
 | **Historical / diagnostic** | `vivado/inspect*.tcl`, `probe_*.tcl`, superseded scripts |
 | **Regenerable, ignored** | `hls/work/`, `*.gen/`, `*.runs/`, `*.cache/`, `*.xpr`, `vitis_workspace/` (≈310 MB) |
 
-### 5.1 The `.bd` is authoritative because Tcl cannot recreate it
+### 5.1 The `.bd` is authoritative; the exported Tcl is now a second description
 
 There is **no `create_bd_design` and no `write_bd_tcl`** in any of the 60 scripts.
 All of them call `open_bd_design [get_files */neural_reconstruction_bd.bd]` on a
 BD that must already exist. `create_base_bd.tcl` opens an existing BD despite its
 name; `create_kv260_project.tcl` creates an empty project and never adds the
-`.bd`. The block design therefore survives only as the `.bd` file itself.
+`.bd`. **This — not the reset polarity (§6.1) — is why the script set cannot
+reproduce the design.**
+
+**Mitigated 2026-09-18.** `vivado/neural_reconstruction_bd.tcl` was exported from
+the authoritative `.bd` with `write_bd_tcl`. It calls `create_bd_design` and
+`create_root_design`, so it is a genuine from-scratch description and a
+reviewable, diffable text form. It carries no absolute paths and no
+machine-specific references.
+
+It is **derived from** the `.bd`, not a replacement for it. The `.bd` remains
+authoritative. The export has one external prerequisite it does not set itself:
+`ip_repo_paths` must point at `vivado/ip_repo/` so that
+`xilinx.com:hls:reconstruction_accel:1.0` resolves in the IP catalog. It also
+declares part `xck26-sfvc784-2LV-c`, board `xilinx.com:kv260_som:part0:1.4` and
+`scripts_vivado_version 2025.1`.
+
+`vivado/replay_bd.tcl` supplies that prerequisite and nothing else — it derives
+every path from `[info script]`, sets `ip_repo_paths`, runs `update_ip_catalog`
+and sources the export. Verified end to end on 2026-09-18: the reproduced block
+design passes `vivado/assert_reset_topology.tcl`. It builds the block design
+only; synthesis, implementation, bitstream and XSA remain separate deliberate
+steps.
 
 ### 5.2 The packaged HLS IP is generated but must be preserved
 
@@ -311,17 +332,69 @@ and do not overwrite them.
 
 ## 6. Open issues
 
-### 6.1 Reset polarity: scripts contradict the shipped design
+### 6.1 Reset polarity — tested and resolved, 2026-09-18
 
-`add_reset_200m.tcl` sets `CONFIG.C_EXT_RESET_HIGH 0` and wires `pl_resetn0`
-directly to `rst_200m/ext_reset_in`. `fix_reset_polarity.tcl` later inserts a
-`util_vector_logic` NOT gate into that path but **never restores the property**.
+**Resolved. A controlled replay disproved the previously documented failure
+mode.** This entry is retained because the earlier warning was acted on as if
+true.
 
-The shipped design has `C_EXT_RESET_HIGH = 1` (generated XCI,
-`value_src="propagated"`; the `.bd` records no override), so inverter +
-active-high is correct and the built hardware is sound. **Replaying both scripts
-in order gives active-low `ext_reset_in` fed by an inverted `pl_resetn0` — reset
-asserted permanently.** Not yet fixed.
+`add_reset_200m.tcl` contains `set_property CONFIG.C_EXT_RESET_HIGH 0
+[get_bd_cells rst_200m]`, and `fix_reset_polarity.tcl` later inserts a
+`util_vector_logic` NOT gate without restoring the property. That reads like a
+contradiction, and this document previously claimed that replaying both scripts
+in order would leave active-low `ext_reset_in` fed by an inverted `pl_resetn0`,
+holding reset asserted forever.
+
+**That cannot happen, because the property is read-only.** On
+`proc_sys_reset:5.0`, `C_EXT_RESET_HIGH` is owned by block-design parameter
+propagation (`value_permission="bd"`), not by the user. The `set_property` in
+`add_reset_200m.tcl` is rejected outright:
+
+```
+CRITICAL WARNING: [BD 41-737] Cannot set the parameter C_EXT_RESET_HIGH
+                  on /rst_200m. It is read-only.
+```
+
+A full replay into a throwaway project — the documented build sequence, both
+reset scripts verbatim in order, then `validate_bd_design` and
+`generate_target all` — measured the property at every stage:
+
+| Stage | `C_EXT_RESET_HIGH` | `ext_reset_in` driven by |
+|---|---|---|
+| after `create_bd_cell rst_200m`, before `set_property` | **1** | — |
+| immediately after `set_property … 0` | **1** (rejected) | — |
+| end of `add_reset_200m.tcl` | **1** | `pl_resetn0` (direct) |
+| end of `fix_reset_polarity.tcl` | **1** | `resetn_inverter/Res` |
+| after `validate_bd_design` | **1** | `resetn_inverter/Res` |
+| after `generate_target all` | **1** | `resetn_inverter/Res` |
+
+The replayed XCI matches the shipped one exactly — `"value": "1",
+"value_src": "propagated", "value_permission": "bd"` — and the replayed
+generated VHDL carries `C_EXT_RESET_HIGH => '1'`. The replayed block design has
+identical cells, identical net names and identical reset topology to the
+authoritative `.bd`.
+
+The correct reading of the two scripts is therefore:
+
+- `C_EXT_RESET_HIGH` defaults to **1** and cannot be changed directly.
+- After `add_reset_200m.tcl`, the design is genuinely **wrong** — active-low
+  `pl_resetn0` drives an input configured active-high.
+- `fix_reset_polarity.tcl` repairs exactly that, by inverting the signal rather
+  than by changing the property. Its name is accurate.
+- The `set_property … 0` line is **dead code**: an attempt to fix the polarity
+  the other way that silently failed. It is misleading, but harmless.
+
+Full evidence — the instrumented replay script, the Vivado console transcript,
+the XCI/VHDL comparison and the assertion runs — is preserved in
+`vivado/reports/reset_replay/`. The topology is now guarded by the read-only
+`vivado/assert_reset_topology.tcl`, which observes and never forces the
+BD-owned property.
+
+**Consequence: the script sequence reproduces the correct reset topology.** It
+is not the reason the design cannot be replayed — the real blocker is that no
+script creates the block design at all (§5.1). Removing the dead `set_property`
+line would be tidier but changes no behaviour, and these scripts are also a
+historical record of what was run.
 
 ### 6.2 Golden-vector coverage is incomplete
 
@@ -381,7 +454,21 @@ archived copy can be positively identified as this build.
 | `vivado/kv260_project/…/impl_1/neural_reconstruction_bd_wrapper.bit` | 7.80 MB | 09-15 20:19 | `0ae427314550b4e4bb8884ce09e8776b325d0ecf517bba134e4e81d7dad853f9` |
 | ✅ `vivado/kv260_project/neural_reconstruction_kv260_embedded.xsa` | 1.62 MB | 09-15 22:40 | `4b2b2bfb9b722441fa478ad354c85d87bb7f115c914943b151012dd0f7d00d74` |
 | ⚠️ `vivado/neural_reconstruction_kv260.xsa` | 1.62 MB | 09-16 22:15 | `e2a4415eb8d6bf534d29884552fb0455f3b6984eeb42810e553f8cb280a9954f` |
+| ⚠️ `vivado/kv260_project/neural_reconstruction_kv260.xsa` | 1.62 MB | 09-15 20:22 | `3576e667055ec8c361b0e5af6a93a7ed089dbcc300165f6a2c4443f4623fcfa1` |
 | `neural_reconstruction_bd.bd` (tracked, for cross-reference) | 57 KB | 09-15 18:52 | `12ef4b3982ca04e00602ccb15c29bd7932f0d32e494862c3ba10a2d9395d7eca` |
+
+> [!WARNING]
+> **Three XSAs exist, with near-identical names and sizes within 1.6 KB of each
+> other.** Exactly one is the trusted Vitis platform artefact:
+>
+> | | File | SHA256 |
+> |---|---|---|
+> | ✅ **TRUSTED** | `neural_reconstruction_kv260_embedded.xsa` | `4b2b2bfb…d7f00d74` |
+> | ❌ not trusted | `vivado/neural_reconstruction_kv260.xsa` | `e2a4415e…80a9954f` |
+> | ❌ not trusted | `vivado/kv260_project/neural_reconstruction_kv260.xsa` | `3576e667…623fcfa1` |
+>
+> Verify by SHA256 before use during hardware bring-up. Filename alone is not
+> sufficient to tell them apart.
 
 ✅ **`neural_reconstruction_kv260_embedded.xsa` is the good one** — the platform
 the Vitis workspace actually consumed, exported by `export_xsa_embedded.tcl` with
@@ -390,6 +477,13 @@ the Vitis workspace actually consumed, exported by `export_xsa_embedded.tcl` wit
 ⚠️ `vivado/neural_reconstruction_kv260.xsa` was produced by the superseded
 `export-xsa.tcl`, which omits **both** `open_run impl_1` and
 `platform.design_intent.embedded`. Do not treat it as a release artefact.
+
+⚠️ `vivado/kv260_project/neural_reconstruction_kv260.xsa` is an earlier export,
+timestamped 09-15 20:22 — three minutes after the bitstream was written and two
+hours before the embedded XSA. It predates `export_xsa_embedded.tcl` and is not
+the platform Vitis consumed. Do not treat it as a release artefact. It is
+recorded here only so it can be positively identified and excluded; it was
+undocumented until 2026-09-18.
 
 ### Archival — done on-machine and to OneDrive, 2026-09-18
 

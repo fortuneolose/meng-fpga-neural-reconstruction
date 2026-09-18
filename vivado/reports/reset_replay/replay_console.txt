@@ -1,0 +1,165 @@
+
+****** Vivado v2025.1.1 (64-bit)
+  **** SW Build 6233196 on Thu Sep 11 21:27:30 MDT 2025
+  **** IP Build 6232796 on Fri Sep 12 01:46:16 MDT 2025
+  **** SharedData Build 6233195 on Thu Sep 11 17:56:43 MDT 2025
+  **** Start of session at: Fri Sep 18 18:20:45 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source replay.tcl
+# set repo "C:/Users/avent/meng-fpga-neural-reconstruction"
+# set tmp  "C:/Users/avent/bdreplay/proj"
+# proc probe {label} {
+#     set v "<no rst_200m>"
+#     catch { set v [get_property CONFIG.C_EXT_RESET_HIGH [get_bd_cells rst_200m]] }
+#     puts "PROBE|$label|C_EXT_RESET_HIGH=$v"
+#     catch {
+#         foreach n [get_bd_nets -of_objects [get_bd_pins rst_200m/ext_reset_in]] {
+#             puts "PROBE|$label|ext_reset_in_net=$n pins=[get_bd_pins -of_objects $n]"
+#         }
+#     }
+# }
+# create_project replay_kv260 $tmp -part xck26-sfvc784-2LV-c -force
+# set_property board_part xilinx.com:kv260_som:part0:1.4 [current_project]
+# set_property ip_repo_paths $repo/vivado/ip_repo [current_project]
+# update_ip_catalog
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/avent/meng-fpga-neural-reconstruction/vivado/ip_repo'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1.1/Vivado/data/ip'.
+# create_bd_design neural_reconstruction_bd
+Wrote  : <C:\Users\avent\bdreplay\proj\replay_kv260.srcs\sources_1\bd\neural_reconstruction_bd\neural_reconstruction_bd.bd> 
+# create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e:3.5 zynq_ultra_ps_e_0
+# create_bd_cell -type ip -vlnv xilinx.com:hls:reconstruction_accel:1.0 reconstruction_accel_0
+# apply_bd_automation -rule xilinx.com:bd_rule:zynq_ultra_ps_e -config {apply_board_preset "1"} [get_bd_cells zynq_ultra_ps_e_0]
+# set ps [get_bd_cells zynq_ultra_ps_e_0]
+# set_property CONFIG.PSU__USE__S_AXI_GP2 1 $ps
+# set_property CONFIG.PSU__USE__S_AXI_GP3 1 $ps
+# set_property CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 200 $ps
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins reconstruction_accel_0/ap_clk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/saxihp0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/saxihp1_fpd_aclk]
+# create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_200m
+INFO: [Ipptcl 7-1463] No Compatible Board Interface found. Board Tab not created in customize GUI
+# probe "7a_after_create_before_setprop"
+PROBE|7a_after_create_before_setprop|C_EXT_RESET_HIGH=1
+WARNING: [BD 5-234] No nets matched 'get_bd_nets -of_objects /rst_200m/ext_reset_in'
+# set_property CONFIG.C_EXT_RESET_HIGH 0 [get_bd_cells rst_200m]
+CRITICAL WARNING: [BD 41-737] Cannot set the parameter C_EXT_RESET_HIGH on /rst_200m. It is read-only.
+# probe "7b_immediately_after_set_0"
+PROBE|7b_immediately_after_set_0|C_EXT_RESET_HIGH=1
+WARNING: [BD 5-234] No nets matched 'get_bd_nets -of_objects /rst_200m/ext_reset_in'
+# create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 reset_locked_const
+INFO: [BD 5-1043] It is recommended to use inline hdl version xilinx.com:inline_hdl:ilconstant:1.0 for the IP type xilinx.com:ip:xlconstant:1.1 for improved performance and reduced disk space. IPs with VLNV xilinx.com:ip:xlconstant:1.1 will not be supported from release 2025.2. More information on inline hdl IP is available in UG994 
+# set_property CONFIG.CONST_VAL 1 [get_bd_cells reset_locked_const]
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins rst_200m/slowest_sync_clk]
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0] [get_bd_pins rst_200m/ext_reset_in]
+# connect_bd_net [get_bd_pins reset_locked_const/dout] [get_bd_pins rst_200m/dcm_locked]
+# connect_bd_net [get_bd_pins rst_200m/peripheral_aresetn] [get_bd_pins reconstruction_accel_0/ap_rst_n]
+# save_bd_design
+Wrote  : <C:\Users\avent\bdreplay\proj\replay_kv260.srcs\sources_1\bd\neural_reconstruction_bd\neural_reconstruction_bd.bd> 
+# probe "7c_end_of_add_reset_200m"
+PROBE|7c_end_of_add_reset_200m|C_EXT_RESET_HIGH=1
+PROBE|7c_end_of_add_reset_200m|ext_reset_in_net=/zynq_ultra_ps_e_0_pl_resetn0 pins=/zynq_ultra_ps_e_0/pl_resetn0 /rst_200m/ext_reset_in
+# disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins rst_200m/ext_reset_in]] [get_bd_pins rst_200m/ext_reset_in]
+# create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 resetn_inverter
+INFO: [BD 5-1043] It is recommended to use inline hdl version xilinx.com:inline_hdl:ilvector_logic:1.0 for the IP type xilinx.com:ip:util_vector_logic:2.0 for improved performance and reduced disk space. IPs with VLNV xilinx.com:ip:util_vector_logic:2.0 will not be supported from release 2025.2. More information on inline hdl IP is available in UG994 
+# set_property -dict [list CONFIG.C_OPERATION {not} CONFIG.C_SIZE {1}] [get_bd_cells resetn_inverter]
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0] [get_bd_pins resetn_inverter/Op1]
+# connect_bd_net [get_bd_pins resetn_inverter/Res] [get_bd_pins rst_200m/ext_reset_in]
+# save_bd_design
+Wrote  : <C:\Users\avent\bdreplay\proj\replay_kv260.srcs\sources_1\bd\neural_reconstruction_bd\neural_reconstruction_bd.bd> 
+# probe "8_end_of_fix_reset_polarity"
+PROBE|8_end_of_fix_reset_polarity|C_EXT_RESET_HIGH=1
+PROBE|8_end_of_fix_reset_polarity|ext_reset_in_net=/resetn_inverter_Res pins=/resetn_inverter/Res /rst_200m/ext_reset_in
+# set_property CONFIG.PSU__USE__M_AXI_GP1 0 [get_bd_cells zynq_ultra_ps_e_0]
+# foreach {sc si mi} {sc_gmem0 x x sc_gmem1 x x sc_control x x} {}
+# create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 sc_gmem0
+# set_property -dict [list CONFIG.NUM_SI {1} CONFIG.NUM_MI {1} CONFIG.NUM_CLKS {1} CONFIG.HAS_ARESETN {1}] [get_bd_cells sc_gmem0]
+# connect_bd_intf_net [get_bd_intf_pins reconstruction_accel_0/m_axi_gmem0] [get_bd_intf_pins sc_gmem0/S00_AXI]
+# connect_bd_intf_net [get_bd_intf_pins sc_gmem0/M00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/S_AXI_HP0_FPD]
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins sc_gmem0/aclk]
+# connect_bd_net [get_bd_pins rst_200m/interconnect_aresetn] [get_bd_pins sc_gmem0/aresetn]
+# create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 sc_gmem1
+# set_property -dict [list CONFIG.NUM_SI {1} CONFIG.NUM_MI {1} CONFIG.NUM_CLKS {1} CONFIG.HAS_ARESETN {1}] [get_bd_cells sc_gmem1]
+# connect_bd_intf_net [get_bd_intf_pins reconstruction_accel_0/m_axi_gmem1] [get_bd_intf_pins sc_gmem1/S00_AXI]
+# connect_bd_intf_net [get_bd_intf_pins sc_gmem1/M00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/S_AXI_HP1_FPD]
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins sc_gmem1/aclk]
+# connect_bd_net [get_bd_pins rst_200m/interconnect_aresetn] [get_bd_pins sc_gmem1/aresetn]
+# create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 sc_control
+# set_property -dict [list CONFIG.NUM_SI {1} CONFIG.NUM_MI {1} CONFIG.NUM_CLKS {1} CONFIG.HAS_ARESETN {1}] [get_bd_cells sc_control]
+# connect_bd_intf_net [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD] [get_bd_intf_pins sc_control/S00_AXI]
+# connect_bd_intf_net [get_bd_intf_pins sc_control/M00_AXI] [get_bd_intf_pins reconstruction_accel_0/s_axi_control]
+# connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins sc_control/aclk]
+# connect_bd_net [get_bd_pins rst_200m/interconnect_aresetn] [get_bd_pins sc_control/aresetn]
+# assign_bd_address -offset 0xA0000000 -range 64K -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs reconstruction_accel_0/s_axi_control/Reg]
+Slave segment '/reconstruction_accel_0/s_axi_control/Reg' is being assigned into address space '/zynq_ultra_ps_e_0/Data' at <0xA000_0000 [ 64K ]>.
+# assign_bd_address -offset 0x00000000 -range 2G -target_address_space [get_bd_addr_spaces reconstruction_accel_0/Data_m_axi_gmem0] [get_bd_addr_segs zynq_ultra_ps_e_0/SAXIGP2/HP0_DDR_LOW]
+Slave segment '/zynq_ultra_ps_e_0/SAXIGP2/HP0_DDR_LOW' is being assigned into address space '/reconstruction_accel_0/Data_m_axi_gmem0' at <0x0000_0000 [ 2G ]>.
+# assign_bd_address -offset 0x00000000 -range 2G -target_address_space [get_bd_addr_spaces reconstruction_accel_0/Data_m_axi_gmem1] [get_bd_addr_segs zynq_ultra_ps_e_0/SAXIGP3/HP1_DDR_LOW]
+Slave segment '/zynq_ultra_ps_e_0/SAXIGP3/HP1_DDR_LOW' is being assigned into address space '/reconstruction_accel_0/Data_m_axi_gmem1' at <0x0000_0000 [ 2G ]>.
+# save_bd_design
+Wrote  : <C:\Users\avent\bdreplay\proj\replay_kv260.srcs\sources_1\bd\neural_reconstruction_bd\neural_reconstruction_bd.bd> 
+# probe "16_before_validate"
+PROBE|16_before_validate|C_EXT_RESET_HIGH=1
+PROBE|16_before_validate|ext_reset_in_net=/resetn_inverter_Res pins=/resetn_inverter/Res /rst_200m/ext_reset_in
+# validate_bd_design
+WARNING: [BD 41-3281] Instance '/zynq_ultra_ps_e_0' is connected on both sides by SmartConnects and cannot automatically configure itself to match the endpoints. Please manually configure its AXI interfaces as required for the design.
+WARNING: [BD 41-3281] Instance '/reconstruction_accel_0' is connected on both sides by SmartConnects and cannot automatically configure itself to match the endpoints. Please manually configure its AXI interfaces as required for the design.
+INFO: [BD 5-943] Reserving offset range <0xA000_0000 [ 64K ]> from slave interface '/sc_control/S00_AXI' to master interface '/sc_control/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] neural_reconstruction_bd_sc_control_0: SmartConnect neural_reconstruction_bd_sc_control_0 is in Low-Area Mode.
+INFO: [Ipptcl 7-1463] No Compatible Board Interface found. Board Tab not created in customize GUI
+INFO: [BD 5-943] Reserving offset range <0x0000_0000 [ 2G ]> from slave interface '/sc_gmem0/S00_AXI' to master interface '/sc_gmem0/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] neural_reconstruction_bd_sc_gmem0_0: SmartConnect neural_reconstruction_bd_sc_gmem0_0 is in High-performance Mode.
+INFO: [BD 5-943] Reserving offset range <0x0000_0000 [ 2G ]> from slave interface '/sc_gmem1/S00_AXI' to master interface '/sc_gmem1/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] neural_reconstruction_bd_sc_gmem1_0: SmartConnect neural_reconstruction_bd_sc_gmem1_0 is in High-performance Mode.
+WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /zynq_ultra_ps_e_0/S_AXI_HP0_FPD(1) and /sc_gmem0/M00_AXI(0)
+WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /zynq_ultra_ps_e_0/S_AXI_HP0_FPD(1) and /sc_gmem0/M00_AXI(0)
+WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /zynq_ultra_ps_e_0/S_AXI_HP1_FPD(1) and /sc_gmem1/M00_AXI(0)
+WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /zynq_ultra_ps_e_0/S_AXI_HP1_FPD(1) and /sc_gmem1/M00_AXI(0)
+# probe "18a_after_validate_bd_design"
+PROBE|18a_after_validate_bd_design|C_EXT_RESET_HIGH=1
+PROBE|18a_after_validate_bd_design|ext_reset_in_net=/resetn_inverter_Res pins=/resetn_inverter/Res /rst_200m/ext_reset_in
+# save_bd_design
+Wrote  : <C:\Users\avent\bdreplay\proj\replay_kv260.srcs\sources_1\bd\neural_reconstruction_bd\neural_reconstruction_bd.bd> 
+# generate_target all [get_files */neural_reconstruction_bd.bd]
+INFO: [BD 41-1662] The design 'neural_reconstruction_bd.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/sc_gmem0/S00_AXI_arlock'(1) to pin: '/reconstruction_accel_0/m_axi_gmem0_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/sc_gmem1/S00_AXI_awlock'(1) to pin: '/reconstruction_accel_0/m_axi_gmem1_AWLOCK'(2) - Only lower order bits will be connected.
+Verilog Output written to : C:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/synth/neural_reconstruction_bd.v
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/sc_gmem0/S00_AXI_arlock'(1) to pin: '/reconstruction_accel_0/m_axi_gmem0_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/sc_gmem1/S00_AXI_awlock'(1) to pin: '/reconstruction_accel_0/m_axi_gmem1_AWLOCK'(2) - Only lower order bits will be connected.
+Verilog Output written to : C:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/sim/neural_reconstruction_bd.v
+Verilog Output written to : C:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/hdl/neural_reconstruction_bd_wrapper.v
+INFO: [xilinx.com:ip:zynq_ultra_ps_e:3.5-0] neural_reconstruction_bd_zynq_ultra_ps_e_0_0: 
+Changes in your design (including the PCW configuration settings) are not automatically exported from Vivado to Amd's SDK, Petalinux or Yocto.
+This is by design to avoid disrupting existing embedded development efforts. To have any changes of your design taking effect in the embedded software flow please export your
+design by going through Vivado's main menu, click on File, then Export finally select Export Hardware, please ensure you click on the Include BitStream option.
+The auto-generated HDF file is all you need to import in Amd's SDK, Petalinux or Yocto for your changes to be reflected in the Embedded Software Flow.
+For more information, please consult PG201, section: Exporting PCW Settings to Embedded Software Flows
+INFO: [PSU-0] Address Range of DDR (0x7ff00000 to 0x7fffffff) is reserved by PMU for internal purpose.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI_HPM0_FPD'. A default connection has been created.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI_HP0_FPD'. A default connection has been created.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI_HP1_FPD'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block zynq_ultra_ps_e_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block reconstruction_accel_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block rst_200m .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block reset_locked_const .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block resetn_inverter .
+Exporting to file c:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/ip/neural_reconstruction_bd_sc_gmem0_0/bd_0/hw_handoff/neural_reconstruction_bd_sc_gmem0_0.hwh
+Generated Hardware Definition File c:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/ip/neural_reconstruction_bd_sc_gmem0_0/bd_0/synth/neural_reconstruction_bd_sc_gmem0_0.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block sc_gmem0 .
+Exporting to file c:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/ip/neural_reconstruction_bd_sc_gmem1_0/bd_0/hw_handoff/neural_reconstruction_bd_sc_gmem1_0.hwh
+Generated Hardware Definition File c:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/ip/neural_reconstruction_bd_sc_gmem1_0/bd_0/synth/neural_reconstruction_bd_sc_gmem1_0.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block sc_gmem1 .
+Exporting to file c:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/ip/neural_reconstruction_bd_sc_control_0/bd_0/hw_handoff/neural_reconstruction_bd_sc_control_0.hwh
+Generated Hardware Definition File c:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/ip/neural_reconstruction_bd_sc_control_0/bd_0/synth/neural_reconstruction_bd_sc_control_0.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block sc_control .
+Exporting to file C:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/hw_handoff/neural_reconstruction_bd.hwh
+Generated Hardware Definition File C:/Users/avent/bdreplay/proj/replay_kv260.gen/sources_1/bd/neural_reconstruction_bd/synth/neural_reconstruction_bd.hwdef
+generate_target: Time (s): cpu = 00:00:25 ; elapsed = 00:00:45 . Memory (MB): peak = 841.820 ; gain = 73.844
+# probe "18b_after_generate_target"
+PROBE|18b_after_generate_target|C_EXT_RESET_HIGH=1
+PROBE|18b_after_generate_target|ext_reset_in_net=/resetn_inverter_Res pins=/resetn_inverter/Res /rst_200m/ext_reset_in
+# puts "REPLAY_DONE"
+REPLAY_DONE
+# close_project
+INFO: [Common 17-206] Exiting Vivado at Fri Sep 18 18:21:49 2026...
