@@ -1,6 +1,10 @@
 # Project state
 
-**As of 2026-09-17.** HEAD `8d075ac` on branch `kv260-integration`.
+**Last verified engineering/evidence commit: `5bdc65d`** on branch
+`kv260-integration`. **Documentation refreshed: 2026-09-18.**
+
+`5bdc65d` is the evidence baseline this document describes, not necessarily the
+repository's current HEAD — documentation commits land after it.
 
 Integer-only CNN image reconstruction (128×128 → 256×256), accelerated on a
 Kria KV260 (`xck26-sfvc784-2LV-c`) at 200 MHz. Vitis HLS 2025.1.1 / Vivado 2025.1.1.
@@ -20,29 +24,42 @@ disagree, **the repository wins** and the discrepancy is noted.
 | HLS out-of-context implementation | ✅ **4.793 ns post-route, timing met** |
 | Per-image latency | ✅ **28.186 ms** @ 200 MHz |
 | RTL co-simulation (Vitis HLS / AXI VIP) | ❌ **Fails** — XSim/AXI VIP kernel exception (tool defect, commit `8c847cd`) |
-| **Standalone RTL simulation vs. golden vectors** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, **0 mismatches** |
+| **Standalone RTL simulation — `STALL=0` baseline** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, **0 mismatches** |
+| **Standalone RTL simulation — `STALL=1` backpressure** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, **0 mismatches**, beat counts unchanged |
 | KV260 system synthesis + implementation | ✅ Routed, 0 routing errors |
 | KV260 system timing | ⚠️ **Met, WNS = +0.058 ns** (58 ps margin) |
 | Bitstream | ✅ Written 2026-09-15 20:19 |
 | On-hardware execution | ❌ No record of the bitstream ever being loaded or run |
-| KV260 integration committed to git | ❌ **Not yet** — see §2 |
+| KV260 integration committed to git | ✅ **Committed** — `2cbd11e`, `23e1aa5`; see §2 |
 | Training checkpoint | ⚠️ **Not present** in the repository or known working tree |
 | Round 3 dataset | ⚠️ **Not present** in the repository or known working tree |
 
 ---
 
-## 2. Branch and commit state — corrected
+## 2. Branch and commit state
 
-**`kv260-integration` currently has no integration commit.** The branch points at
-`8d075ac`, the same commit as `hls-conv1-line-buffer`, and has zero commits of
-its own. It has no upstream and does not exist on `origin`.
+`kv260-integration` has an upstream at `origin/kv260-integration`, and the KV260
+effort is committed. Through the evidence baseline `5bdc65d`:
 
-Every artefact of the KV260 effort — the block design, 60 Tcl scripts, the
-packaged IP, the system reports — exists **only in the working tree**. The
-branch name describes intent, not content.
+| Commit | What |
+|---|---|
+| `2cbd11e` | Integrated Vivado design and packaged HLS IP |
+| `23e1aa5` | HLS and routed KV260 evidence |
+| `423d06c` | Verified project state and Claude context |
+| `0912632` | Standalone RTL golden-vector simulation harness |
+| `57b0d55` | Standalone RTL golden-vector pass (`STALL=0`) |
+| `5bdc65d` | RTL backpressure stress pass (`STALL=1`) |
 
-`8d075ac` *is* pushed, but as `origin/hls-conv1-line-buffer`. `origin/main` is 9
-commits behind.
+`origin/main` remains behind and has not been updated.
+
+> **Historical — resolved 2026-09-17 22:23.** The audit recorded that
+> `kv260-integration` had *no integration commit*: the branch pointed at
+> `8d075ac`, the same commit as `hls-conv1-line-buffer`, with zero commits of
+> its own, no upstream, and no presence on `origin`. Every artefact of the KV260
+> effort — the block design, 60 Tcl scripts, the packaged IP, the system reports
+> — existed **only in the working tree**, and the branch name described intent
+> rather than content. That is no longer the case; the table above is the
+> current state.
 
 ---
 
@@ -159,7 +176,8 @@ tightest resource.
 |---|---|
 | CSim vs. golden vectors | ✅ **Bit-exact**, frames 0805 / 0809 / 0824, max difference 0 ticks |
 | C/RTL co-simulation (Vitis HLS / AXI VIP) | ❌ **FAIL** — tool defect, see below |
-| **Standalone RTL simulation** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 0 mismatches, see `hls/reports/standalone_rtl_sim/` |
+| **Standalone RTL simulation — `STALL=0`** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, 0 mismatches, see `hls/reports/standalone_rtl_sim/` |
+| **Standalone RTL simulation — `STALL=1`** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, 0 mismatches, cumulative `stalled_cycles=2,202,721`, see `hls/reports/standalone_rtl_stress/` |
 
 **The co-simulation failure is a tool defect, not a demonstrated arithmetic
 mismatch.** XSim raised a kernel `FATAL_ERROR` inside the Xilinx-supplied AXI VIP
@@ -185,13 +203,47 @@ traffic. All **101 / 101** packaged RTL and ROM files were verified byte-identic
 to the HLS output, and every comparison traces by SHA256 to the committed golden
 vectors.
 
-**Consequence: the standalone XSim result closes the previously missing
+The testbench's `STALL=1` backpressure variant was subsequently run against
+commit `57b0d55` and also returned **`RTL_SUITE_PASS`** — see
+`hls/reports/standalone_rtl_stress/`:
+
+| | `STALL=0` | `STALL=1` |
+|---|---|---|
+| Result | `RTL_SUITE_PASS` | `RTL_SUITE_PASS` |
+| Frames | 3 | 3 |
+| Pixels | 196,608 / 196,608 | 196,608 / 196,608 |
+| Mismatches | **0** | **0** |
+| Read beats / frame | 262,144 | 262,144 |
+| Write beats / frame | 32,768 | 32,768 |
+| Cycles / frame | 6,164,920 (all three) | 6,362,231 / 6,358,129 / 6,358,129 |
+| Cumulative `stalled_cycles` | 1,579,005 | **2,202,721** |
+
+Injected backpressure — `AWREADY` withheld 1 cycle in 7, `ARREADY` 1 in 5,
+`WREADY` 1 in 4, `RVALID` bubbled 1 in 3, a 3-cycle `B` delay, plus AXI4-Lite
+host delays — increased per-frame RTL execution by roughly **3.1–3.2 %** while
+leaving results and transaction counts exactly unchanged. Every `_actual.hex` is
+byte-identical to both its expected file and the `STALL=0` output for the same
+frame. No timeout, fatal, X/Z, payload-stability assertion, protocol assertion,
+guard-region corruption or deadlock occurred. An independent one-frame scout run
+in a separate directory reproduced the stressed 0805 cycle count exactly
+(6,362,231).
+
+Note that `stalled_cycles` is **not** a direct measure of injected backpressure:
+it also counts ordinary handshake waits from the single-outstanding-burst
+testbench memory model, which is why the `STALL=0` baseline is already non-zero.
+The evidence that injection was genuinely active is recorded in
+`hls/reports/standalone_rtl_stress/PROVENANCE.md`.
+
+**Consequence: the standalone XSim results close the previously missing
 RTL-level functional-verification gap for the packaged reconstruction accelerator
-RTL used by the integrated KV260 design. It does not constitute post-route
-functional simulation or hardware validation of the generated bitstream.**
-Routing and timing closure still prove only that the design *fits and runs at
-speed*. Remaining gaps: `STALL=0` baseline only (no backpressure stress),
-3 of 20 evaluation frames, final output only (see §6.2), and no board execution.
+RTL used by the integrated KV260 design, both with an always-ready memory and
+under injected AXI backpressure. They do not constitute post-route functional
+simulation or hardware validation of the generated bitstream.** Routing and
+timing closure still prove only that the design *fits and runs at speed*.
+Remaining gaps: 3 of 20 evaluation frames, final output only (see §6.2), a single
+fixed stall pattern rather than an exhaustive exploration of AXI timing, no
+SmartConnect 32→128-bit width conversion or real DDR in the testbench, and no
+board execution.
 
 ---
 
@@ -339,39 +391,83 @@ the Vitis workspace actually consumed, exported by `export_xsa_embedded.tcl` wit
 `export-xsa.tcl`, which omits **both** `open_run impl_1` and
 `platform.design_intent.embedded`. Do not treat it as a release artefact.
 
-### ⚠️ Open action: durable archival
+### Archival — done on-machine and to OneDrive, 2026-09-18
 
-**These artefacts are currently ignored by Git and exist only in one working tree
-on one machine. That is not preservation.** They are being kept, not deleted, but
-they still need a durable home outside ordinary Git history — a tagged release
-asset, an artefact store, or a backed-up archive — verified against the SHA256s
-above.
+The XSA and bitstream were archived out of the single working tree on
+2026-09-18. Both were verified against the SHA256s above before packaging:
+
+| Copy | Location |
+|---|---|
+| Local archive | `FPGA_Archives\meng-fpga-neural-reconstruction\kv260_2026-09-17_423d06c\` — XSA + BIT with original build timestamps, plus `PROVENANCE.txt` and `SHA256SUMS.txt` |
+| Local package | `…\kv260_2026-09-17_423d06c.zip` (1.95 MB, 4 entries) |
+| Off-machine copy | `OneDrive\FPGA_Archives\meng-fpga-neural-reconstruction\kv260_2026-09-17_423d06c.zip` — same SHA256 as the local zip |
+
+The zip round-trips to the original inner hashes, so the package is verified end
+to end rather than merely written. **Caveat on the zip hash:**
+`Compress-Archive` output is not deterministic — it embeds entry timestamps —
+so re-creating the zip from the same inputs yields a different SHA256. The zip
+hash identifies *this package*; the durable fingerprints are the two inner
+hashes, carried inside the archive as `SHA256SUMS.txt`.
+
+**Still outstanding:** OneDrive upload completion was never positively
+confirmed — local file attributes look identical before and after upload, so
+this needs checking via the OneDrive client or web interface. A tagged release
+asset or an additional independent backup would also be worth having.
 
 This matters more than usual here: regenerating the XSA currently requires the
 reset-polarity fix (§6.1) plus a full rebuild, and system timing closes with only
 **58 ps** of margin, so a rebuild is not guaranteed to reproduce an equivalent
-result. Until archival is done, this build is one disk failure from unrepeatable.
+result.
+
+The `STALL=0` baseline simulation outputs — the three `_actual.hex` files and
+`baseline_complete.log`, which existed only in a scratch run directory — were
+archived alongside, to
+`FPGA_Archives\meng-fpga-neural-reconstruction\stall0_2026-09-18\`, all four
+verified against the hashes in
+`hls/reports/standalone_rtl_sim/PROVENANCE.md`.
 
 ---
 
 ## 8. Immediate next steps
 
-1. Make the first real commit on `kv260-integration` (this preservation change).
-2. Fix the reset-polarity contradiction (§6.1) and add a `write_bd_tcl` export so
-   the block design has a reviewable text form alongside the `.bd`.
-3. ✅ **Done (2026-09-18).** Standalone RTL baseline verification passes —
-   `RTL_SUITE_PASS`, 3 frames, 196,608/196,608 pixels, 0 mismatches
-   (`hls/reports/standalone_rtl_sim/`). The next verification steps are:
-   a. run the deliberate `STALL=1` backpressure/stress variant, which the
-      harness supports but which has never been exercised;
-   b. broaden coverage beyond the 3 golden frames if useful;
-   c. eventual KV260 hardware execution.
-4. Extend the testbench to check the five intermediates, and widen beyond 3 frames.
-5. Update the CSim runners to 2025.1.1 and the current path (§6.3).
-6. Re-run system timing after any PL change — 58 ps is not margin.
-7. **Search for the checkpoint and Round 3 dataset** (§5.3) — start with the
+### Complete
+
+- ✅ **KV260 integration committed** (`2cbd11e`, `23e1aa5`) — §2.
+- ✅ **Standalone RTL baseline verification** (2026-09-18) — `RTL_SUITE_PASS`,
+  3 frames, 196,608/196,608 pixels, 0 mismatches
+  (`hls/reports/standalone_rtl_sim/`).
+- ✅ **Standalone RTL backpressure verification** (2026-09-18) —
+  `RTL_SUITE_PASS` under `STALL=1`, 3 frames, 196,608/196,608 pixels,
+  0 mismatches, transaction counts unchanged
+  (`hls/reports/standalone_rtl_stress/`).
+- ✅ **Build artefacts archived** off the single working tree, with an
+  off-machine copy — §7, subject to the OneDrive sync confirmation noted there.
+
+### The next major boundary: KV260 hardware bring-up
+
+RTL-level functional verification is now as complete as this harness can make
+it. Every remaining question about whether the design *works* — as opposed to
+whether it *fits and runs at speed* — requires the board.
+
+1. **KV260 hardware bring-up.** Load the bitstream, run a golden frame on the
+   PS, and compare against `hls/tb/data/`. Nothing in this repository has ever
+   been executed on hardware.
+2. **Fix the reset-polarity contradiction** (§6.1) and add a `write_bd_tcl`
+   export so the block design has a reviewable text form alongside the `.bd`.
+   Required before any rebuild, and therefore a prerequisite for regenerating
+   the XSA.
+3. **Re-run system timing after any PL change** — 58 ps is not margin.
+
+### Optional, in parallel or after bring-up
+
+4. **Widen RTL coverage** beyond the 3 golden frames toward the 20-frame
+   Round 3 / Round 4 evaluation set.
+5. **Extend the testbench to check the five intermediates** (§6.2), which remain
+   covered by no automated test.
+6. **Search for the checkpoint and Round 3 dataset** (§5.3) — start with the
    OneDrive location the recorded SHA paths point at, including its version
    history and recycle bin. Verify any candidate against
    `round3_best_model_sha256.txt` before trusting it.
-8. **Archive the build artefacts durably** (§7). They are ignored by Git and
-   currently exist in one working tree on one machine.
+7. **Update the CSim runners** to 2025.1.1 and the current path (§6.3).
+8. **Confirm the OneDrive archive upload completed** (§7), and consider a tagged
+   release asset or a second independent backup.

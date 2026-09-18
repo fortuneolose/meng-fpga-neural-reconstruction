@@ -57,7 +57,7 @@ python prepare.py --repo <repo root> --run-dir <run dir>
 3. Converts the committed golden vectors in `hls/tb/data/<id>/` to
    `<id>_input.hex` / `<id>_expected.hex`, recording the SHA256 of each source
    `.bin`, and asserting their exact lengths (16,384 B in, 131,072 B out).
-4. Parses the **111 top-level ports** out of `reconstruction_accel.v`, generates
+4. Parses the **110 top-level ports** out of `reconstruction_accel.v`, generates
    matching `reg`/`wire` declarations and the DUT instantiation, appends
    `tb_body.sv`, and wires two `axi_ram` instances to `m_axi_gmem0` (read-only)
    and `m_axi_gmem1` (write-only). The result is `tb.sv`.
@@ -103,7 +103,8 @@ rtl_verify
 
 Plusargs: `CASES=1..3` selects how many golden frames to run; `STALL=1` enables
 injected AXI backpressure (see `PROVENANCE.md` for what the reported
-`stalled_cycles` counter does and does not mean).
+`stalled_cycles` counter does and does not mean). The completed `STALL=1` run is
+preserved separately in [`../standalone_rtl_stress/`](../standalone_rtl_stress/).
 
 ## What is deliberately **not** preserved here
 

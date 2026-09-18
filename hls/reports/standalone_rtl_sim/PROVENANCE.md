@@ -77,8 +77,13 @@ The design is compute-bound — Conv2 alone is 84 % of latency — so most of th
 
 Consequently `stalled_cycles` being non-zero here does **not** mean backpressure
 was stress-tested. The testbench's own guard for that only arms when injection is
-enabled (`if(stress && stalled_cycles==0) $fatal`). A deliberate `STALL=1` run
-has **not** yet been performed.
+enabled (`if(stress && stalled_cycles==0) $fatal`) — and, because this baseline
+shows the counter is already non-zero without injection, that guard cannot
+distinguish working injection from silently broken injection.
+
+**A deliberate `STALL=1` run was subsequently performed (2026-09-18) and also
+passed — see [`../standalone_rtl_stress/`](../standalone_rtl_stress/).** This
+record describes the unstressed baseline only.
 
 ## Evidence integrity
 
@@ -145,7 +150,9 @@ This result covers the **packaged accelerator RTL** only.
   intermediates (`conv1_output_u8`, `conv2_output_u8`, `branch_input_u8`,
   `residual_int8`, `bilinear_ticks_u16`) remain unchecked by any automated test —
   see `docs/PROJECT_STATE.md` §6.2, which this run does not change.
-- **No backpressure stress.** `STALL=0` baseline only; `STALL=1` has not been run.
+- **No backpressure stress in *this* run.** `STALL=0` baseline only. The
+  `STALL=1` stress run is a separate result — see
+  [`../standalone_rtl_stress/`](../standalone_rtl_stress/).
 - **Behavioural RTL simulation.** This is not post-synthesis or post-route
   gate-level simulation, carries no timing information, and is **not** a
   functional verification of the generated bitstream.

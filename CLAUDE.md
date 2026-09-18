@@ -16,10 +16,19 @@ filenames suggest.
 1. **`neural_reconstruction_bd.bd` is authoritative.** No Tcl script creates the
    block design — there is no `create_bd_design` or `write_bd_tcl` anywhere. The
    `.bd` is the only description of the KV260 design. See `vivado/SCRIPTS.md`.
-2. **RTL co-simulation does not pass.** CSim is bit-exact; cosim has never
-   completed, blocked by an XSim/AXI VIP kernel exception. The file
-   `csim_c_model_pass.txt` is CSim output, not RTL evidence. See
-   `hls/reports/cosim_xsim_failure/README.md`.
+2. **Two different RTL verification paths — don't conflate them.**
+   - **Vitis HLS C/RTL co-simulation still fails**, blocked by an XSim/AXI VIP
+     kernel exception. It is a tool/infrastructure failure, not a demonstrated
+     arithmetic mismatch. See `hls/reports/cosim_xsim_failure/README.md`.
+   - **Independent standalone XSim RTL verification passes** for the packaged
+     accelerator RTL: `STALL=0` and `STALL=1` each ran 3 golden frames,
+     196,608/196,608 pixels, **0 mismatches**. See
+     `hls/reports/standalone_rtl_sim/` and `hls/reports/standalone_rtl_stress/`.
+
+   These standalone results verify the packaged **behavioural** RTL under the
+   exercised AXI timing profiles. They are **not** post-route, bitstream or
+   hardware validation. Note also that `csim_c_model_pass.txt` is CSim output,
+   not RTL evidence.
 3. **System timing margin is 58 picoseconds** (WNS +0.058 ns at 200 MHz). Never
    assume timing survives a change. See `vivado/reports/system_routed/`.
 4. **The original training checkpoint and Round 3 dataset are not present in the
