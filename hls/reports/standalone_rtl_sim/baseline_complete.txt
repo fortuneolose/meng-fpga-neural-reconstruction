@@ -1,0 +1,58 @@
+#-----------------------------------------------------------
+# xsim v2025.1.1 (64-bit)
+# SW Build 6233196 on Thu Sep 11 21:27:30 MDT 2025
+# IP Build 6232796 on Fri Sep 12 01:46:16 MDT 2025
+# SharedData Build 6233195 on Thu Sep 11 17:56:43 MDT 2025
+# Start of session at: Fri Sep 18 14:54:10 2026
+# Process ID         : 27664
+# Current directory  : C:/Users/avent/Documents/Codex/2026-09-17/c-users-avent-meng-fpga-neural/work/rtl_verification/run
+# Command line       : xsim.exe -log baseline_complete.log -mode tcl -source {xsim.dir/rtl_verify/xsim_script.tcl}
+# Log file           : C:/Users/avent/Documents/Codex/2026-09-17/c-users-avent-meng-fpga-neural/work/rtl_verification/run/baseline_complete.log
+# Journal file       : C:/Users/avent/Documents/Codex/2026-09-17/c-users-avent-meng-fpga-neural/work/rtl_verification/run\xsim.jou
+# Running On         : Fortune
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : 12th Gen Intel(R) Core(TM) i5-1240P
+# CPU Frequency      : 2112 MHz
+# CPU Physical cores : 12
+# CPU Logical cores  : 16
+# Host memory        : 8275 MB
+# Swap memory        : 20235 MB
+# Total Virtual      : 28510 MB
+# Available Virtual  : 13544 MB
+#-----------------------------------------------------------
+source xsim.dir/rtl_verify/xsim_script.tcl
+# xsim {rtl_verify} -testplusarg CASES=3 -testplusarg STALL=0 -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PROGRESS cycle=0 frame=0
+FRAME_START id=0805 stalls=0 cycle=71
+PROGRESS cycle=1000000 frame=0
+PROGRESS cycle=2000000 frame=0
+PROGRESS cycle=3000000 frame=0
+PROGRESS cycle=4000000 frame=0
+PROGRESS cycle=5000000 frame=0
+PROGRESS cycle=6000000 frame=0
+RTL_GOLDEN_PASS id=0805 pixels=65536 mismatches=0 observed_cycles=6164920 read_beats=262144 write_beats=32768 stalls=0
+FRAME_START id=0809 stalls=0 cycle=6165022
+PROGRESS cycle=7000000 frame=1
+PROGRESS cycle=8000000 frame=1
+PROGRESS cycle=9000000 frame=1
+PROGRESS cycle=10000000 frame=1
+PROGRESS cycle=11000000 frame=1
+PROGRESS cycle=12000000 frame=1
+RTL_GOLDEN_PASS id=0809 pixels=65536 mismatches=0 observed_cycles=6164920 read_beats=262144 write_beats=32768 stalls=0
+FRAME_START id=0824 stalls=0 cycle=12329973
+PROGRESS cycle=13000000 frame=2
+PROGRESS cycle=14000000 frame=2
+PROGRESS cycle=15000000 frame=2
+PROGRESS cycle=16000000 frame=2
+PROGRESS cycle=17000000 frame=2
+PROGRESS cycle=18000000 frame=2
+RTL_GOLDEN_PASS id=0824 pixels=65536 mismatches=0 observed_cycles=6164920 read_beats=262144 write_beats=32768 stalls=0
+RTL_SUITE_PASS frames=3 stalls=0 stalled_cycles=1579005
+$finish called at time : 92474465 ns : File "C:/Users/avent/Documents/Codex/2026-09-17/c-users-avent-meng-fpga-neural/work/rtl_verification/run/tb.sv" Line 401
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:17:34 . Memory (MB): peak = 170.512 ; gain = 0.051
+exit
+INFO: xsimkernel Simulation Memory Usage: 16996 KB (Peak: 16996 KB), Simulation CPU Usage: 949061 ms
+INFO: [Common 17-206] Exiting xsim at Fri Sep 18 15:11:59 2026...

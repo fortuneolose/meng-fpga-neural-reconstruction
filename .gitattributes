@@ -1,0 +1,13 @@
+# Preserved simulator evidence — keep byte-exact.
+#
+# These three files are verbatim XSim output, and their SHA256 hashes are
+# recorded in hls/reports/standalone_rtl_sim/PROVENANCE.md as the evidence of
+# record. They are LF-only as written by the simulator. Without -text, a
+# checkout under core.autocrlf=true would rewrite them with CRLF, and they
+# would no longer hash to the values in PROVENANCE.md.
+#
+# Scoped deliberately to these three paths only: the rest of the repository
+# keeps Git's normal text handling.
+hls/reports/standalone_rtl_sim/baseline_complete.txt -text
+hls/reports/standalone_rtl_sim/baseline_partial.txt -text
+hls/reports/standalone_rtl_sim/xelab_verify.txt -text

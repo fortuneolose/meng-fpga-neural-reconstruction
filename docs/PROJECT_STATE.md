@@ -19,7 +19,8 @@ disagree, **the repository wins** and the discrepancy is noted.
 | HLS C synthesis @ 200 MHz | ✅ 4.400 ns estimated |
 | HLS out-of-context implementation | ✅ **4.793 ns post-route, timing met** |
 | Per-image latency | ✅ **28.186 ms** @ 200 MHz |
-| RTL co-simulation | ❌ **Fails** — XSim/AXI VIP kernel exception |
+| RTL co-simulation (Vitis HLS / AXI VIP) | ❌ **Fails** — XSim/AXI VIP kernel exception (tool defect, commit `8c847cd`) |
+| **Standalone RTL simulation vs. golden vectors** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, **0 mismatches** |
 | KV260 system synthesis + implementation | ✅ Routed, 0 routing errors |
 | KV260 system timing | ⚠️ **Met, WNS = +0.058 ns** (58 ps margin) |
 | Bitstream | ✅ Written 2026-09-15 20:19 |
@@ -157,7 +158,8 @@ tightest resource.
 | Level | Result |
 |---|---|
 | CSim vs. golden vectors | ✅ **Bit-exact**, frames 0805 / 0809 / 0824, max difference 0 ticks |
-| C/RTL co-simulation | ❌ **FAIL** — see below |
+| C/RTL co-simulation (Vitis HLS / AXI VIP) | ❌ **FAIL** — tool defect, see below |
+| **Standalone RTL simulation** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 0 mismatches, see `hls/reports/standalone_rtl_sim/` |
 
 **The co-simulation failure is a tool defect, not a demonstrated arithmetic
 mismatch.** XSim raised a kernel `FATAL_ERROR` inside the Xilinx-supplied AXI VIP
@@ -169,9 +171,27 @@ died before any output was compared. Evidence and full reading in
 Cosim was last run 09-13 20:55 against commit `8c847cd`. **It has not been re-run
 since**, so it predates HEAD by three source commits.
 
-**Consequence: the RTL, the packaged IP and the bitstream carry no passing
-RTL-level functional verification.** Routing and timing closure prove the design
-*fits and runs at speed*, not that it *computes the right answer*.
+**Superseded 2026-09-18 — see `hls/reports/standalone_rtl_sim/`.** The AXI VIP
+was bypassed by a standalone testbench that drives the packaged RTL through its
+real AXI4 memory and AXI4-Lite control interfaces, loading nothing from the
+crashing VIP stack. Against commit `423d06c`, XSim 2025.1.1 returned
+**`RTL_SUITE_PASS`**: golden frames 0805 / 0809 / 0824, **65,536 pixels each,
+196,608 / 196,608 compared, 0 mismatches**, 6,164,920 cycles and 262,144 /
+32,768 read/write beats per frame, normal `$finish`, exit code 0.
+
+The testbench rejects unwritten output bytes rather than accepting incomplete
+output, guards memory outside the output window, and requires non-zero AXI
+traffic. All **101 / 101** packaged RTL and ROM files were verified byte-identical
+to the HLS output, and every comparison traces by SHA256 to the committed golden
+vectors.
+
+**Consequence: the standalone XSim result closes the previously missing
+RTL-level functional-verification gap for the packaged reconstruction accelerator
+RTL used by the integrated KV260 design. It does not constitute post-route
+functional simulation or hardware validation of the generated bitstream.**
+Routing and timing closure still prove only that the design *fits and runs at
+speed*. Remaining gaps: `STALL=0` baseline only (no backpressure stress),
+3 of 20 evaluation frames, final output only (see §6.2), and no board execution.
 
 ---
 
@@ -339,9 +359,13 @@ result. Until archival is done, this build is one disk failure from unrepeatable
 1. Make the first real commit on `kv260-integration` (this preservation change).
 2. Fix the reset-polarity contradiction (§6.1) and add a `write_bd_tcl` export so
    the block design has a reviewable text form alongside the `.bd`.
-3. Decide how to get RTL verification: retry cosim on current HEAD, try the VHDL
-   path, reduce the transaction/data footprint, or check for an XSim patch.
-   Until something passes, the design is functionally unverified below C level.
+3. ✅ **Done (2026-09-18).** Standalone RTL baseline verification passes —
+   `RTL_SUITE_PASS`, 3 frames, 196,608/196,608 pixels, 0 mismatches
+   (`hls/reports/standalone_rtl_sim/`). The next verification steps are:
+   a. run the deliberate `STALL=1` backpressure/stress variant, which the
+      harness supports but which has never been exercised;
+   b. broaden coverage beyond the 3 golden frames if useful;
+   c. eventual KV260 hardware execution.
 4. Extend the testbench to check the five intermediates, and widen beyond 3 frames.
 5. Update the CSim runners to 2025.1.1 and the current path (§6.3).
 6. Re-run system timing after any PL change — 58 ps is not margin.
