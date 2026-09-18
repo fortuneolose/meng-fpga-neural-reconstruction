@@ -1,13 +1,22 @@
 # Preserved simulator evidence — keep byte-exact.
 #
-# These three files are verbatim XSim output, and their SHA256 hashes are
-# recorded in hls/reports/standalone_rtl_sim/PROVENANCE.md as the evidence of
-# record. They are LF-only as written by the simulator. Without -text, a
-# checkout under core.autocrlf=true would rewrite them with CRLF, and they
-# would no longer hash to the values in PROVENANCE.md.
+# These files are verbatim XSim output, and their SHA256 hashes are recorded in
+# the PROVENANCE.md beside them as the evidence of record. The -text attribute
+# disables Git's end-of-line conversion for them, so the bytes checked out are
+# byte-for-byte the bytes the simulator emitted, whatever core.autocrlf is set
+# to on the machine doing the checkout. Without it, a checkout under
+# core.autocrlf=true would rewrite line endings and the files would no longer
+# hash to the recorded values.
 #
-# Scoped deliberately to these three paths only: the rest of the repository
-# keeps Git's normal text handling.
+# Scoped deliberately to these paths only: the rest of the repository keeps
+# Git's normal text handling.
+
+# STALL=0 baseline — hls/reports/standalone_rtl_sim/PROVENANCE.md
 hls/reports/standalone_rtl_sim/baseline_complete.txt -text
 hls/reports/standalone_rtl_sim/baseline_partial.txt -text
 hls/reports/standalone_rtl_sim/xelab_verify.txt -text
+
+# STALL=1 backpressure stress — hls/reports/standalone_rtl_stress/PROVENANCE.md
+hls/reports/standalone_rtl_stress/stress_complete.txt -text
+hls/reports/standalone_rtl_stress/stress_scout.txt -text
+hls/reports/standalone_rtl_stress/xelab_stress.txt -text

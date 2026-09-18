@@ -1,0 +1,5 @@
+rtl_verify
+--runall
+--testplusarg CASES=3
+--testplusarg STALL=1
+--log stress_complete.log
