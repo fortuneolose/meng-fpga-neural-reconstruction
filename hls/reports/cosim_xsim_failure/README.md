@@ -45,8 +45,70 @@ evidence is `hls_cosim.rpt` and `hls_run_cosim_axi_vip_exception.txt`.
 
 - **CSim:** bit-exact on golden vectors 0805 / 0809 / 0824.
 - **Cosim (RTL):** never completed — blocked by the XSim/AXI VIP kernel exception.
-- **Therefore:** the synthesised RTL, the packaged IP, and the KV260 bitstream
-  carry **no passing RTL-level functional verification** at any level.
+- **Therefore (as assessed on 2026-09-13):** the synthesised RTL, the packaged
+  IP, and the KV260 bitstream carried **no passing RTL-level functional
+  verification** at any level.
+  **This conclusion is SUPERSEDED — see "Resolution (2026-09-19)" below.**
 
 `STRB_WIDTH=4` in the failing sequence corroborates the 32-bit `m_axi` gmem data
 width recorded in the packaged IP's `component.xml`.
+
+---
+
+## Resolution (2026-09-19)
+
+**C/RTL co-simulation now PASSES.** The evidence above is retained unmodified
+as the historical record of the 2025.1.1 failure; this section records the
+subsequent outcome.
+
+### What the historical failure was
+
+The Vitis HLS / XSim **2025.1.1** run failed **before transaction 1 retired**
+(`RTL Simulation : 0 / 1 [0.00%]`), with a simulator kernel exception raised
+inside the generated **AXI VIP** infrastructure (`axi_slave_seq_lib.sv`).
+**No accelerator output comparison occurred in that run.** No arithmetic
+mismatch between the C model and the RTL was ever demonstrated.
+
+### Current HEAD result
+
+Under **Vitis / XSim 2026.1.1**, current HEAD `a5e1e07` passed:
+
+| Stage | Result |
+|---|---|
+| CSim | PASS |
+| Synthesis | PASS |
+| Verilog C/RTL co-simulation | **PASS** |
+
+Golden vectors **0805, 0809 and 0824 were all BIT-EXACT**, **mismatch count 0**,
+with **3/3 RTL transactions completed**. No `FATAL_ERROR`, no `ERROR`, no
+`CRITICAL WARNING`.
+
+### Isolated historical control
+
+An isolated control experiment using the **exact historical source state
+`8c847cd`** — the same commit that failed in 2025.1.1 — also **passed** the same
+three-vector C/RTL co-simulation under 2026.1.1, likewise 3/3 transactions,
+all three vectors bit-exact, mismatch count 0.
+
+**Therefore `8c847cd` is ruled out as the necessary cause of the historical
+failure.** The remaining changed factors are the **toolchain version**
+(2025.1.1 → 2026.1.1) and the **host environment** (8 GB laptop → 32 GB PC).
+These changed together and could not be varied independently, so **the
+experiment does not uniquely determine the historical root cause.**
+
+### Independent RTL evidence
+
+Separately from co-simulation, standalone RTL simulation passes
+**196,608 / 196,608 output pixels with zero mismatches** under both the
+baseline and deterministic AXI backpressure (`STALL=1`) configurations — see
+`../standalone_rtl_sim/` and `../standalone_rtl_stress/`.
+
+### Still outstanding
+
+**Physical KV260 hardware validation remains unperformed.** No board has been
+programmed; PS–PL control, DDR access and end-to-end execution on real
+hardware are untested.
+
+Full investigation evidence (consoles, cosim/csynth reports, provenance and a
+verified SHA-256 manifest) is held outside this repository at
+`C:\kv260_cosim_recovery\evidence\`.
