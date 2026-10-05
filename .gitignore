@@ -51,3 +51,6 @@ vivado/*.xsa
 vivado/kv260_project/dfx_runtime.txt
 vivado/kv260_project/system_utilization_routed.rpt
 vivado/kv260_project/system_utilization_summary_routed.rpt
+
+# Native (g++) C-model runner: fetched headers and build output
+hls/tb/.native/
