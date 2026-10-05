@@ -161,3 +161,26 @@ This result covers the **packaged accelerator RTL** only.
 The earlier Vitis HLS C/RTL co-simulation failure remains a separate historical
 result and is unaffected by this run — see
 [`../cosim_xsim_failure/README.md`](../cosim_xsim_failure/README.md).
+
+## Errata (2026-10-05)
+
+The run, its logs and its pass verdict are unaffected. Three explanations above
+are corrected:
+
+- **Read beats.** "16,384 input bytes ÷ 4 B/beat × 64 passes" gets the right
+  number for the wrong reason. The bilinear stage reads four input bytes per
+  output pixel, each as its own single-byte beat
+  (`hls/src/reconstruction_accel.cpp:291-308`): 65,536 pixels × 4 = 262,144.
+- **`stalled_cycles` and accelerator waiting.** The section above says the
+  stalls are "not a measure of time the accelerator spent waiting". In fact
+  they account for essentially all of the RTL's extra latency: the run took
+  6,164,920 cycles per frame against the HLS estimate of 5,637,182, a
+  difference of 527,738, while `stalled_cycles` averages 526,335 per frame.
+  The memory model's one-burst-at-a-time handshaking serialises the bilinear
+  stage's single-byte reads. Real DDR behind SmartConnect will have higher
+  latency, so this stage is the one most likely to be slower on the board.
+- **Hashes.** The SHA256s in this file and in `manifest.json` were taken on a
+  Windows checkout (CRLF line endings) and match a Linux checkout only after
+  LF→CRLF conversion: 0 of 101 `manifest.json` RTL hashes match as-is.
+  `tools/verify_recorded_hashes.py` checks every record in both forms;
+  all match.

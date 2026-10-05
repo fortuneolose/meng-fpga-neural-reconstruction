@@ -1,7 +1,8 @@
 # Project state
 
 **Last verified engineering/evidence commit: `5bdc65d`** on branch
-`kv260-integration`. **Documentation refreshed: 2026-09-18.**
+`kv260-integration`. **Documentation refreshed: 2026-09-18; corrected
+2026-10-05 (§0).**
 
 `5bdc65d` is the evidence baseline this document describes, not necessarily the
 repository's current HEAD — documentation commits land after it.
@@ -15,6 +16,45 @@ disagree, **the repository wins** and the discrepancy is noted.
 
 ---
 
+## 0. Update 2026-10-05 — read this first
+
+A second review (2026-10-05) re-checked this document against the repository by
+running code. The sections below are kept as written, with dated notes where they
+are now wrong. The changes, in summary:
+
+- **The Round 3 checkpoint is in the repository** — `round3/best_model.pt`
+  inside `results/round3.zip` (commit `7f8f97b`), SHA256 `af6c79ce…5ac5`,
+  matching the recorded hash. Its int8 export reproduces every committed
+  parameter exactly. §5.3 is superseded.
+- **The golden vectors regenerate from repository contents.** The 20 validation
+  HR crops are committed (`results/round3/comparison/*_target.png`);
+  `src/rebuild_round3_val.py` rebuilds the pairs and the generator reproduces
+  all committed golden files byte-for-byte (Pillow 12.3.0). The 17 other
+  validation frames now have golden vectors too (`hls/tb/data/`).
+- **The C model is bit-exact on all 20 frames**, and an independent
+  re-implementation matches every intermediate stage (`tests/`). §6.2 and §6.5
+  are partly resolved. The RTL is still verified on 3 frames, final output only.
+- **C/RTL cosim:** 2025.1.1 failed (evidence here). A pass under 2026.1.1 and a
+  2026.1.1 Vivado rebuild are **reported** (commit `449606f` and the final
+  report) but their evidence is outside the repository, at
+  `C:\kv260_cosim_recovery\evidence\`. They are not counted as verified here.
+  See `hls/reports/cosim_xsim_failure/README.md` for two caveats.
+- **The block design is reproducible from Tcl** (`vivado/replay_bd.tcl`, §5.1),
+  and the reset scripts were shown correct (§6.1). `CLAUDE.md` and §8 still
+  listed both as open; corrected.
+- **Recorded SHA256s were taken on a Windows (CRLF) checkout**, so most do not
+  match a Linux checkout byte-for-byte. `tools/verify_recorded_hashes.py` checks
+  all 317 records in every form: 0 mismatches.
+- **Measured RTL latency is 30.8 ms/frame**, not the 28.186 ms HLS estimate.
+  The 527,738 extra cycles per frame are the testbench memory serialising the
+  bilinear stage's 262,144 single-byte reads (§4.3 note).
+- **The system critical path is inside the accelerator** — Conv2 weight ROM to
+  an unregistered DSP multiply — not in the integration logic (§4.2 note).
+- CI (`.github/workflows/verify.yml`) now runs every check that needs no AMD
+  tools. The active work plan is [`IMPROVEMENT_PLAN.md`](IMPROVEMENT_PLAN.md).
+
+---
+
 ## 1. Status at a glance
 
 | Item | State |
@@ -23,7 +63,7 @@ disagree, **the repository wins** and the discrepancy is noted.
 | HLS C synthesis @ 200 MHz | ✅ 4.400 ns estimated |
 | HLS out-of-context implementation | ✅ **4.793 ns post-route, timing met** |
 | Per-image latency | ✅ **28.186 ms** @ 200 MHz |
-| RTL co-simulation (Vitis HLS / AXI VIP) | ❌ **Fails** — XSim/AXI VIP kernel exception (tool defect, commit `8c847cd`) |
+| RTL co-simulation (Vitis HLS / AXI VIP) | ❌ **Fails** under 2025.1.1 — XSim/AXI VIP kernel exception (tool defect, commit `8c847cd`). ⚠️ 2026.1.1 pass **reported, evidence not in repository** (§0) |
 | **Standalone RTL simulation — `STALL=0` baseline** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, **0 mismatches** |
 | **Standalone RTL simulation — `STALL=1` backpressure** | ✅ **`RTL_SUITE_PASS`** — 3 frames, 196,608/196,608 pixels, **0 mismatches**, beat counts unchanged |
 | KV260 system synthesis + implementation | ✅ Routed, 0 routing errors |
@@ -31,8 +71,9 @@ disagree, **the repository wins** and the discrepancy is noted.
 | Bitstream | ✅ Written 2026-09-15 20:19 |
 | On-hardware execution | ❌ No record of the bitstream ever being loaded or run |
 | KV260 integration committed to git | ✅ **Committed** — `2cbd11e`, `23e1aa5`; see §2 |
-| Training checkpoint | ⚠️ **Not present** in the repository or known working tree |
-| Round 3 dataset | ⚠️ **Not present** in the repository or known working tree |
+| Training checkpoint | ✅ **Present** in `results/round3.zip`, hash-verified (§0; superseded 2026-10-05) |
+| Round 3 dataset | ⚠️ Training images **not present**; the 20 validation pairs **rebuild exactly** from committed crops (§0) |
+| Golden vectors / C model, all 20 validation frames | ✅ Regenerate byte-for-byte; C model bit-exact on 20/20; independent model matches every stage (CI) |
 
 ---
 
@@ -152,6 +193,12 @@ convention, producing near-duplicates — one of which (`export-xsa.tcl`) is wro
 
 Out-of-context implementation of the accelerator alone.
 
+> **Note 2026-10-05.** "BRAM 91" is in 18K units, as `hls_impl_pnr.rpt` counts.
+> The routed utilization report gives the same memory as **45.5 tiles**
+> (44 RAMB36 + 3 RAMB18), the unit used in §4.2. The latency above is the HLS
+> estimate; the packaged RTL measured 6,164,920 cycles (30.825 ms) per frame in
+> standalone simulation (§4.3).
+
 ### 4.2 KV260 integrated system — `vivado/reports/system_routed/`
 
 | Metric | Value |
@@ -169,6 +216,16 @@ Out-of-context implementation of the accelerator alone.
 accelerator's standalone 0.207 ns. Any IP bump, tool update, or placement-seed
 change can flip this — re-run timing after every PL change. URAM at 50 % is the
 tightest resource.
+
+> **Note 2026-10-05.** "Integration consumed" is misleading. The worst system
+> paths are all **inside the accelerator**: Conv2 weight ROM
+> `p_ZL13CONV2_WEIGHTS_1_U/q0_reg` → unregistered `mul_8s_8ns_16_1_1_U104` →
+> `mac_muladd_8s_8ns_16s_17_4_1_U106`. The out-of-context worst path was a
+> different one (Conv1, `mul_8ns_8ns_15_1_1_U28`). Placement in the full system
+> exposed a new Conv2 path rather than the interconnect taking margin.
+> Registering that multiply is the obvious fix (`IMPROVEMENT_PLAN.md` L3a). The
+> final report also states that a 2026.1.1 rebuild **failed** timing with the
+> default strategy (WNS −0.104 ns) — evidence not in the repository.
 
 ### 4.3 Verification
 
@@ -237,7 +294,15 @@ The evidence that injection was genuinely active is recorded in
 **Consequence: the standalone XSim results close the previously missing
 RTL-level functional-verification gap for the packaged reconstruction accelerator
 RTL used by the integrated KV260 design, both with an always-ready memory and
-under injected AXI backpressure. They do not constitute post-route functional
+under injected AXI backpressure.
+
+> **Note 2026-10-05.** The `STALL=0` memory is not always-ready: it accepts one
+> read and one write burst at a time (`axi_ram.sv`: `arready` is low while a
+> burst is in flight). That serialisation is why the RTL took 527,738 more
+> cycles per frame than the HLS estimate — almost exactly the 526,335
+> `stalled_cycles` per frame. The bilinear stage issues 262,144 single-byte
+> reads per frame (4 per output pixel), so real DDR latency will matter on the
+> board. They do not constitute post-route functional
 simulation or hardware validation of the generated bitstream.** Routing and
 timing closure still prove only that the design *fits and runs at speed*.
 Remaining gaps: 3 of 20 evaluation frames, final output only (see §6.2), a single
@@ -298,6 +363,14 @@ a full csynth + implementation cycle, and because its `.dat` ROM images bake in
 the quantised weights. Full rationale: `vivado/ip_repo/README.md`.
 
 ### 5.3 The model and dataset are not present in the repository
+
+> **Superseded 2026-10-05.** The checkpoint *is* in the repository:
+> `round3/best_model.pt` inside `results/round3.zip` (commit `7f8f97b`),
+> SHA256 `af6c79ce…5ac5` — the recorded value. The 20 validation pairs rebuild
+> exactly from the committed HR crops (`src/rebuild_round3_val.py`), and the
+> golden vectors regenerate byte-for-byte (`tests/check_golden_regeneration.py`).
+> Only the training images remain absent. The text below is the 2026-09-17
+> record.
 
 **The original training checkpoint and Round 3 dataset are not present in the
 current repository or known project working tree.**
@@ -408,6 +481,12 @@ Coverage is also 3 frames of the 20-frame Round 3 / Round 4 evaluation set.
 
 Combined with §4.3, a per-stage arithmetic fault could reach hardware undetected.
 
+> **Partly resolved 2026-10-05.** `tests/check_integer_reference.py`, an
+> independent implementation of the fixed-point contract, now checks all five
+> intermediates of the 3 primary frames and the output of all 20 frames, and the
+> C model runs on all 20 (`hls/tb/run_csim_native.sh --all`). Both run in CI.
+> Still open: the RTL is verified on 3 frames and the final output only.
+
 ### 6.3 CSim runner scripts are stale and will not run
 
 `run_csim_2026_1.cmd` and `run_csim_direct.cmd` invoke **Vitis 2026.1** from
@@ -418,7 +497,7 @@ moved out of OneDrive, and every artefact in it was built with **2025.1.1** from
 
 ### 6.4 Tcl scripts are unportable
 
-Thirteen scripts hardcode `subst` drives (`V:` = `vivado/kv260_project/`,
+Thirteen (counted again 2026-10-05: **twelve**) scripts hardcode `subst` drives (`V:` = `vivado/kv260_project/`,
 `M:` = repo root); the rest assume CWD is a repo *subdirectory* (`../vivado/…`).
 Neither convention was documented before `vivado/SCRIPTS.md`.
 
@@ -427,6 +506,10 @@ Neither convention was documented before `vivado/SCRIPTS.md`.
 `hls/src/reconstruction_params.h` is a manual byte-identical copy of
 `hardware_reference/parameters/reconstruction_params.h`. Currently consistent
 (SHA256 verified), with no automated check to keep it that way.
+
+> **Resolved 2026-10-05.** `tests/check_integer_reference.py` checks in CI that
+> every array and constant in `hls/src/reconstruction_params.h` equals the `.npy`
+> parameters and the metadata.
 
 ### 6.6 32-bit gmem against 128-bit HP ports
 
@@ -513,6 +596,11 @@ reset-polarity fix (§6.1) plus a full rebuild, and system timing closes with on
 **58 ps** of margin, so a rebuild is not guaranteed to reproduce an equivalent
 result.
 
+> **Note 2026-10-05.** No reset-polarity fix is needed (§6.1 resolved it); the
+> block design replays with `vivado/replay_bd.tcl`. The point about margin
+> stands: the final report states that a 2026.1.1 rebuild missed timing with the
+> default strategy.
+
 The `STALL=0` baseline simulation outputs — the three `_actual.hex` files and
 `baseline_complete.log`, which existed only in a scratch run directory — were
 archived alongside, to
@@ -552,6 +640,11 @@ whether it *fits and runs at speed* — requires the board.
    the XSA.
 3. **Re-run system timing after any PL change** — 58 ps is not margin.
 
+> **Status 2026-10-05.** Item 2 is **done**: §6.1 showed the reset scripts are
+> correct, and `vivado/neural_reconstruction_bd.tcl` is the `write_bd_tcl`
+> export (§5.1). Items 1 and 3 stand. The ordered plan is now
+> [`IMPROVEMENT_PLAN.md`](IMPROVEMENT_PLAN.md).
+
 ### Optional, in parallel or after bring-up
 
 4. **Widen RTL coverage** beyond the 3 golden frames toward the 20-frame
@@ -565,3 +658,9 @@ whether it *fits and runs at speed* — requires the board.
 7. **Update the CSim runners** to 2025.1.1 and the current path (§6.3).
 8. **Confirm the OneDrive archive upload completed** (§7), and consider a tagged
    release asset or a second independent backup.
+
+> **Status 2026-10-05.** Item 4: done for the C model (20/20 frames); the RTL
+> is still 3 frames. Item 5: done for the reference chain
+> (`tests/check_integer_reference.py`); the RTL testbench still checks the final
+> output only. Item 6: the checkpoint is found (`results/round3.zip`); the
+> training images are still missing. Items 7 and 8 are open.

@@ -15,7 +15,7 @@ not change behaviour.
 | Convention | Used by | Assumption |
 |---|---|---|
 | Relative | most Sept-15 scripts | CWD is a repo **subdirectory** (e.g. `hls/`), so `../vivado/…` resolves into the repo |
-| `subst` drives | 13 later scripts | `V:` = `vivado/kv260_project/`, `M:` = repo root |
+| `subst` drives | 12 later scripts (13 in the original count; 12 on re-count 2026-10-05) | `V:` = `vivado/kv260_project/`, `M:` = repo root |
 
 Neither is created automatically. Establish the mapping before running anything.
 

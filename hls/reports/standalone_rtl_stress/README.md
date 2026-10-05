@@ -17,6 +17,12 @@ recorded the gap as *"`STALL=0` baseline only (no backpressure stress)"*.
 
 This run closes that gap for the exercised stall pattern.
 
+> **Note 2026-10-05.** "Always ready" is not accurate for `STALL=0`: the memory
+> model accepts one read burst and one write burst at a time (`arready` is low
+> while a burst is in flight), so `STALL=0` already applies ordinary handshake
+> backpressure. `STALL=1` adds the injected pattern on top of that. See the
+> errata in `../standalone_rtl_sim/PROVENANCE.md`.
+
 ## The harness is not duplicated here
 
 `prepare.py`, `tb_body.sv`, `axi_ram.sv` and the generated `tb.sv` live in

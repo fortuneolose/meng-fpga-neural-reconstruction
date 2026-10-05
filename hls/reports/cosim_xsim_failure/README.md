@@ -1,5 +1,24 @@
 # C/RTL co-simulation failure evidence
 
+> **Status 2026-10-05.** The verdict below is the **2025.1.1** record, and the
+> evidence in this directory supports it. The "Resolution (2026-09-19)" section
+> further down reports a **pass under 2026.1.1**, but that run's evidence is held
+> outside the repository (`C:\kv260_cosim_recovery\evidence\`), so it is
+> *reported, not verified in repository*. Two caveats on it:
+>
+> 1. Cosim re-synthesises the RTL from source. A 2026.1.1 pass verifies
+>    2026.1.1-generated RTL, **not** the packaged 2025.1.1 IP in
+>    `vivado/ip_repo/` that the bitstream contains. The packaged IP is verified
+>    by `../standalone_rtl_sim/` and `../standalone_rtl_stress/`.
+> 2. The failing run reports `0 / 1` transactions
+>    (`hls_run_cosim_axi_vip_exception.txt`), but the committed C testbench —
+>    unchanged from `599da3e` until 2026-10-05 — calls the kernel three times,
+>    which would show as `/ 3`. That is unexplained, so the 2026.1.1 "isolated
+>    historical control" may not have reproduced the failing configuration.
+>
+> "Current HEAD `a5e1e07`" in the Resolution section is a documentation commit;
+> its HLS source is identical to `8d075ac`.
+
 **Verdict: C/RTL co-simulation FAILS. It has never completed successfully.**
 
 The failure is an **XSim simulator kernel exception inside the Xilinx-supplied

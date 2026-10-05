@@ -164,3 +164,25 @@ ones.
   records it having been loaded onto or exercised on a KV260.
 - **No reproducibility guarantee.** The build came from an uncommitted working
   tree, and the Tcl scripts do not recreate the block design.
+
+## Status 2026-10-05
+
+Two statements above are out of date; the timing and utilization numbers are
+unaffected.
+
+- **RTL functional verification now exists** for the packaged IP in this
+  build: standalone XSim simulation, 3 golden frames, 0 mismatches, with and
+  without injected AXI backpressure (`hls/reports/standalone_rtl_sim/`,
+  `hls/reports/standalone_rtl_stress/`). It is behavioural RTL simulation, not
+  post-route or on-hardware validation.
+- **The block design is reproducible from Tcl:** `vivado/replay_bd.tcl` rebuilds
+  it from the `write_bd_tcl` export `vivado/neural_reconstruction_bd.tcl`, and
+  the reset scripts were shown to produce the correct topology
+  (`vivado/reports/reset_replay/`). Synthesis to bitstream still has no single
+  portable entry point.
+
+The worst setup paths in this report are all inside the accelerator: Conv2
+weight ROM `p_ZL13CONV2_WEIGHTS_1_U/q0_reg` → unregistered
+`mul_8s_8ns_16_1_1_U104` → `mac_muladd_8s_8ns_16s_17_4_1_U106`. The accelerator's
+`interrupt` output is not connected in this block design; software must poll
+`ap_done`.

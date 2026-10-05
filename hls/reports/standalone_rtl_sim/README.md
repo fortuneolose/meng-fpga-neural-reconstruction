@@ -13,6 +13,12 @@ transaction completes, so no output is ever compared. That failure is preserved
 separately in [`../cosim_xsim_failure/`](../cosim_xsim_failure/) and is a tool
 defect, not a demonstrated arithmetic mismatch.
 
+> **Note 2026-10-05.** That describes Vitis HLS 2025.1.1. A cosim pass under
+> 2026.1.1 has since been reported, with evidence outside the repository (see
+> `../cosim_xsim_failure/README.md`). Cosim re-synthesises the RTL, so this
+> standalone run remains the only in-repository functional evidence for the
+> **packaged 2025.1.1 IP** in the bitstream.
+
 This harness bypasses the AXI VIP entirely. It replaces it with a small,
 hand-written AXI4 memory model (`axi_ram.sv`) and a directed testbench body
 (`tb_body.sv`), so nothing from the crashing UVM/VIP stack is loaded. The

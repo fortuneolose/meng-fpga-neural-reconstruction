@@ -13,10 +13,8 @@ The work is split between two Claude sessions:
 | **Local** | Windows PC with Vivado / Vitis (and possibly the KV260) | §4: toolchain, evidence import, HLS changes, rebuild, host software, bring-up | its own branches (see §4) |
 
 **Local session: `git pull` before starting, and again before merging
-anything into `kv260-integration`.** The cloud session is editing
-`CLAUDE.md`, `docs/PROJECT_STATE.md` and the report READMEs; avoid editing
-those files until §3 is marked complete below, to keep the two sessions from
-conflicting.
+anything into `kv260-integration`.** The cloud session's work (§3) is complete
+and pushed, so the documentation is free to edit.
 
 `CLAUDE.md` says not to re-run synthesis, implementation, HLS or simulation
 without being asked. The user has asked for the full set of changes, but
@@ -98,16 +96,23 @@ These are the standards the review applied; the fixes are held to them too.
 
 ## 3. Cloud session (in progress on `kv260-integration`)
 
-Status is updated here as each item lands.
+**Complete (2026-10-05).**
 
-| Item | Status |
+| Item | Result |
 |---|---|
-| Native C-model runner (`hls/tb/run_csim_native.sh`) | pending |
-| Independent integer reference test, all 6 stages (`tests/`) | pending |
-| Golden vectors for all 20 validation frames | pending |
-| Cross-platform hash verification | pending |
-| `requirements*.txt`, root `README.md`, GitHub Actions CI | pending |
-| Reconcile `CLAUDE.md`, `PROJECT_STATE.md` and report READMEs | pending |
+| Native C-model runner (`hls/tb/run_csim_native.sh`) | g++ against pinned open-source `ap_int` headers; `--all` runs every frame |
+| Independent integer reference (`tests/check_integer_reference.py`) | Matches every stage of the 3 primary frames and the output of all 20; checks `reconstruction_params.h` against the `.npy` parameters |
+| Golden vectors for all 20 validation frames | 17 new frames in `hls/tb/data/`; the C model is bit-exact on all 20; `tests/check_golden_regeneration.py` regenerates all 76 committed golden files byte-for-byte |
+| Cross-platform hash verification (`tools/verify_recorded_hashes.py`) | 317 records, 0 mismatches; 216 match only the Windows (CRLF) form |
+| `requirements*.txt`, root `README.md`, CI | `.github/workflows/verify.yml` runs all of the above |
+| Documentation reconciled | `CLAUDE.md` rewritten; dated notes in `PROJECT_STATE.md` (§0) and the evidence READMEs / PROVENANCE files |
+
+One finding from this work: requantisation rounding (half away from zero vs.
+half up) is **not observable** with these parameters — every negative tie clips
+— so no golden vector can distinguish the two, and none needs to. The test
+proves this from the parameters and will flag it if new parameters change it.
+The bilinear-to-branch half-to-even rounding *is* observable and is exercised
+86,674 times by the 20 frames.
 
 ---
 
@@ -157,7 +162,8 @@ as unverified. Also try to explain the `0 / 1` transaction count above.
 One commit per change, each with its evidence directory. Verification gate
 for every change, in order:
 
-1. Native or Vitis CSim bit-exact on **all 20** frames;
+1. CSim bit-exact on **all 20** frames: `hls/tb/run_csim_native.sh --all`, or
+   Vitis with `csim.argv=--all`;
 2. csynth report (latency, II, resources);
 3. C/RTL cosim, 3 frames;
 4. HLS out-of-context implementation timing;
