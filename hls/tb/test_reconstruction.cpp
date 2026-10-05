@@ -91,7 +91,18 @@ static bool read_binary(
 }
 
 
-int main() {
+// Frame selection:
+//
+//   (no arguments)   the three golden frames 0805, 0809, 0824
+//   --all            every frame listed in <data root>/frames.txt
+//   ID [ID ...]      the named frames
+//
+// The default is what Vitis CSim and C/RTL co-simulation run.
+
+int main(
+    int argc,
+    char **argv
+) {
 
     const std::string root =
         find_data_root();
@@ -115,18 +126,58 @@ int main() {
         << std::endl;
 
 
-    const char *ids[] = {
-        "0805",
-        "0809",
-        "0824"
-    };
+    std::vector<std::string> ids;
+
+
+    if (
+        argc > 1
+        &&
+        std::string(argv[1]) == "--all"
+    ) {
+
+        std::ifstream list(
+            (root + "/frames.txt").c_str()
+        );
+
+        std::string id;
+
+        while (list >> id) {
+            ids.push_back(id);
+        }
+
+        if (ids.empty()) {
+
+            std::cerr
+                << "ERROR: no frames in "
+                << root
+                << "/frames.txt"
+                << std::endl;
+
+            return 1;
+        }
+
+    } else if (argc > 1) {
+
+        ids.assign(
+            argv + 1,
+            argv + argc
+        );
+
+    } else {
+
+        ids = {
+            "0805",
+            "0809",
+            "0824"
+        };
+    }
 
 
     bool all_passed = true;
 
 
     for (
-        const char *id
+        const std::string &id
         : ids
     ) {
 
@@ -325,7 +376,9 @@ int main() {
 
 
     std::cout
-        << "All 3 golden vectors "
+        << "All "
+        << ids.size()
+        << " golden vectors "
         << "matched exactly."
         << std::endl;
 

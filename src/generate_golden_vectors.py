@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 import json
 import math
 
@@ -34,6 +35,63 @@ GOLDEN_IDS = [
     "0809",
     "0824",
 ]
+
+
+# --------------------------------------------------
+# Optional command-line overrides
+#
+# With no arguments the script behaves exactly as
+# before: the three golden IDs above, written into
+# hardware_reference/golden_vectors (primary data).
+# Use --out to write somewhere else, e.g. when
+# regenerating for comparison.
+# --------------------------------------------------
+
+parser = argparse.ArgumentParser(
+    description=(
+        "Generate integer golden vectors."
+    )
+)
+
+parser.add_argument(
+    "--out",
+    type=Path,
+    default=OUT,
+)
+
+parser.add_argument(
+    "--val-dir",
+    type=Path,
+    default=VAL_LR.parent,
+    help="directory holding lr/ and hr/",
+)
+
+id_group = parser.add_mutually_exclusive_group()
+
+id_group.add_argument(
+    "--ids",
+    nargs="+",
+)
+
+id_group.add_argument(
+    "--all",
+    action="store_true",
+    help="every *_lr.png in the validation set",
+)
+
+args = parser.parse_args()
+
+OUT = args.out
+VAL_LR = args.val_dir / "lr"
+VAL_HR = args.val_dir / "hr"
+
+if args.all:
+    GOLDEN_IDS = sorted(
+        path.name[:-len("_lr.png")]
+        for path in VAL_LR.glob("*_lr.png")
+    )
+elif args.ids:
+    GOLDEN_IDS = args.ids
 
 
 # --------------------------------------------------
