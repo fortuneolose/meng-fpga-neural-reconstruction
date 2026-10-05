@@ -11,6 +11,12 @@ development timeline, what is proven vs. what is not, and the open issues.
 Read it before changing anything; several things in this repo are not what their
 filenames suggest.
 
+**[`docs/IMPROVEMENT_PLAN.md`](docs/IMPROVEMENT_PLAN.md)** — the active work
+plan (2026-10-05): verified review findings, the split between the cloud and
+local sessions, and the ordered work items. A 2026-10-05 review found that
+points 1, 2 and 4 below are partly out of date; the plan's §1 has the verified
+corrections, and this file is being reconciled.
+
 ## Four things to know before you touch the hardware flow
 
 1. **`neural_reconstruction_bd.bd` is authoritative.** No Tcl script creates the
