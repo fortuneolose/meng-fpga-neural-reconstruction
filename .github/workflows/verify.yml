@@ -1,0 +1,34 @@
+name: verify
+
+# Checks that need no AMD tools. They cover the C model and the golden data,
+# not the synthesised RTL, the bitstream or the board.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements-verify.txt
+
+      - name: Recorded SHA256s match the tracked files
+        run: python tools/verify_recorded_hashes.py
+
+      - name: Golden vectors regenerate byte-for-byte
+        run: python tests/check_golden_regeneration.py
+
+      - name: Independent integer reference matches every stage
+        run: python tests/check_integer_reference.py
+
+      - name: HLS C model is bit-exact on all frames (native g++)
+        run: hls/tb/run_csim_native.sh --all

@@ -1,0 +1,10 @@
+# Verification checks (CI and local): tests/*.py, tools/verify_recorded_hashes.py,
+# src/rebuild_round3_val.py, src/generate_golden_vectors.py,
+# src/export_golden_binary.py. No PyTorch needed.
+#
+# Pillow is pinned exactly: the low-resolution inputs come from Pillow's
+# bicubic resize, and 12.3.0 is the version verified to reproduce the committed
+# golden vectors byte for byte (2026-10-05, Python 3.11.15). Re-run
+# tests/check_golden_regeneration.py before changing it.
+numpy==2.4.6
+Pillow==12.3.0

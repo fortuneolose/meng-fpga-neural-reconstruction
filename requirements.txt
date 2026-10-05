@@ -1,0 +1,11 @@
+# Full software pipeline: training, quantisation, evaluation (src/*.py).
+#
+# Recorded in results/worklog.txt for the original runs: Python 3.13.1,
+# PyTorch 2.14.0+cu130, CUDA runtime 13.0. The numpy and Pillow versions used
+# then were not recorded; the pins below are the versions verified on
+# 2026-10-05 to reproduce the committed golden vectors exactly.
+#
+# Install PyTorch for your platform first (CUDA 13.0 build used originally):
+#   pip install torch==2.14.0 --index-url https://download.pytorch.org/whl/cu130
+torch==2.14.0
+-r requirements-verify.txt
